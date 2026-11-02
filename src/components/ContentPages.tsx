@@ -1,0 +1,829 @@
+import Image from "next/image";
+import Link from "next/link";
+import {
+  localizedCategoryName,
+  localizedPageCopy,
+  newsSlug,
+  ppo,
+  type Locale,
+  type NewsStory,
+  type PeopleGroup,
+  type PPOCategory,
+  type PPOProduct,
+  type SourcePage,
+} from "@/lib/content";
+import { t } from "@/lib/i18n";
+import { NewsArchive } from "@/components/NewsArchive";
+import { ProductCatalog, ProductDetail } from "@/components/ProductCatalog";
+import { ContactForm } from "@/components/ContactForm";
+
+function localizedText(locale: Locale, copy: Record<Locale, string>) {
+  return copy[locale];
+}
+
+function StoryCard({ story, locale }: { story: NewsStory; locale: Locale }) {
+  const translation = story.translations?.[locale];
+  const title = translation?.title ?? story.title;
+  const excerpt =
+    translation?.blocks.find((block) => block.type === "p")?.text ??
+    story.excerpt;
+  const href = `/${locale}/news/${newsSlug(story)}`;
+
+  return (
+    <article className="story-card">
+      <Link className="story-image" href={href} aria-label={title}>
+        {story.image ? (
+          <Image
+            src={story.image}
+            alt={story.imageAlt}
+            fill
+            sizes="(max-width: 48rem) 100vw, 33vw"
+          />
+        ) : (
+          <span className="image-fallback">{title}</span>
+        )}
+      </Link>
+      <div className="story-body">
+        <div className="story-meta"><span>{story.date || "PPO News"}</span></div>
+        <h3><Link href={href}>{title}</Link></h3>
+        <p>{excerpt}</p>
+        <Link className="text-link" href={href}>{t(locale, "explore")} →</Link>
+      </div>
+    </article>
+  );
+}
+
+function PageIntro({
+  locale,
+  eyebrow,
+  title,
+  description,
+}: {
+  locale: Locale;
+  eyebrow?: string;
+  title: string;
+  description?: string;
+}) {
+  return (
+    <header className="page-hero container">
+      <div className="page-hero-inner">
+        <div>
+          {eyebrow && <span className="section-kicker">{eyebrow}</span>}
+          <h1>{title}</h1>
+        </div>
+        {description && <p>{description}</p>}
+      </div>
+    </header>
+  );
+}
+
+function SectionHeading({
+  kicker,
+  title,
+  description,
+  link,
+}: {
+  kicker?: string;
+  title: string;
+  description?: string;
+  link?: { href: string; label: string };
+}) {
+  return (
+    <div className="section-heading">
+      <div>
+        {kicker && <span className="section-kicker">{kicker}</span>}
+        <h2>{title}</h2>
+      </div>
+      {(description || link) && (
+        <div className="section-heading-aside">
+          {description && <p>{description}</p>}
+          {link && <Link className="text-link" href={link.href}>{link.label} →</Link>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CategoryTiles({
+  categories,
+  locale,
+}: {
+  categories: PPOCategory[];
+  locale: Locale;
+}) {
+  return (
+    <div className="category-grid">
+      {categories.map((category) => (
+        <Link
+          className="category-card"
+          href={`/${locale}/products/${category.id}`}
+          key={category.id}
+        >
+          <div className="category-image">
+            {category.cover ? (
+              <Image
+                src={category.cover}
+                alt={localizedCategoryName(category, locale)}
+                fill
+                sizes="(max-width: 48rem) 100vw, (max-width: 62rem) 33vw, 25vw"
+              />
+            ) : (
+              <span className="image-fallback">{localizedCategoryName(category, locale)}</span>
+            )}
+          </div>
+          <div className="category-body">
+            <h3>{localizedCategoryName(category, locale)}</h3>
+            <span className="category-arrow" aria-hidden="true">↗</span>
+          </div>
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+export function HomePage({ locale }: { locale: Locale }) {
+  const categories = ppo.categories;
+  const topStory = ppo.news[0];
+  const intro = ppo.pages.find((page) => page.id === "company");
+  const introCopy = intro ? localizedPageCopy(intro, locale) : null;
+  const heroPhoto =
+    topStory?.image ??
+    categories.find((category) => category.id === "salads")?.cover ??
+    ppo.logo;
+
+  return (
+    <>
+      <section className="hero">
+        <div className="hero-image">
+          <Image
+            src={heroPhoto}
+            alt={topStory?.imageAlt ?? "Fresh produce and PPO producer relationships"}
+            fill
+            priority
+            sizes="100vw"
+          />
+        </div>
+        <div className="container hero-content">
+          <div className="hero-topline"><span className="color-mark" /> PPO Services AG</div>
+          <h1>
+            {locale === "de"
+              ? "Frische. Vertrauen. Weitblick."
+              : locale === "fr"
+                ? "Fraîcheur. Confiance. Ouverture."
+                : locale === "it"
+                  ? "Freschezza. Fiducia. Visione."
+                  : locale === "es"
+                    ? "Frescura. Confianza. Visión."
+                    : "Freshness. Trust. Perspective."}
+          </h1>
+          <p>
+            {locale === "de"
+              ? "Frische Früchte und Gemüse aus verlässlichen Produzentenbeziehungen – mit über 70 Jahren Erfahrung und Schweizer Wurzeln."
+              : locale === "fr"
+                ? "Fruits et légumes frais issus de relations de confiance avec les producteurs, portés par plus de 70 ans d'expérience suisse."
+                : locale === "it"
+                  ? "Frutta e verdura fresca, grazie a rapporti affidabili con i produttori e a oltre 70 anni di esperienza svizzera."
+                  : locale === "es"
+                    ? "Frutas y hortalizas frescas gracias a relaciones fiables con productores y más de 70 años de experiencia suiza."
+                    : "Fresh fruit and vegetables, built on trusted grower relationships and more than 70 years of Swiss expertise."}
+          </p>
+          <div className="hero-actions">
+            <Link className="button button-primary" href={`/${locale}/products`}>
+              {t(locale, "discoverProducts")}
+            </Link>
+            <Link className="button button-secondary" href={`/${locale}/contact`}>
+              {t(locale, "getInTouch")}
+            </Link>
+          </div>
+        </div>
+        {topStory && (
+          <p className="hero-caption">
+            {topStory.translations?.[locale]?.title ?? topStory.title} · {topStory.date}
+          </p>
+        )}
+      </section>
+
+      <section className="content-section">
+        <div className="container intro-grid">
+          <div className="intro-copy">
+            <span className="section-kicker">{t(locale, "aboutPPO")}</span>
+            <h2>
+              {locale === "de"
+                ? "Seit Generationen nah am Ursprung."
+                : locale === "fr"
+                  ? "Depuis des générations, proches de l'origine."
+                  : locale === "it"
+                    ? "Da generazioni, vicini all'origine."
+                    : locale === "es"
+                      ? "Generaciones cerca del origen."
+                      : "Generations close to the source."}
+            </h2>
+            {introCopy?.blocks.slice(1, 4).map((block, index) => (
+              <p key={`${index}-${block.text}`}>{block.text}</p>
+            ))}
+            <Link className="text-link" href={`/${locale}/company`}>
+              {t(locale, "explore")} {t(locale, "company")} →
+            </Link>
+          </div>
+          <Link className="photo-frame intro-photo" href={`/${locale}/company/history`}>
+            <Image
+              src="/ppo/fileadmin/Files/Pictures/14_Geschichte/PPO_Gebaeude_Final.jpg"
+              alt={locale === "de" ? "PPO-Gebäude in Däniken" : "PPO Services AG premises"}
+              fill
+              sizes="(max-width: 48rem) 100vw, 42vw"
+            />
+            <span className="photo-caption">
+              {locale === "de" ? "Däniken · Schweiz" : "Däniken · Switzerland"}
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <section className="content-section portfolio-section">
+        <div className="container">
+          <SectionHeading
+            kicker={t(locale, "products")}
+            title={t(locale, "featuredProducts")}
+            description={localizedText(locale, {
+              de: "Entdecken Sie das PPO-Sortiment – jede Produktaufnahme ist der passenden Kategorie und dem Originalprodukt zugeordnet.",
+              en: "Explore PPO's portfolio. Every product photograph is paired with its source product and category.",
+              fr: "Découvrez l'assortiment PPO. Chaque photo correspond à son produit et à sa catégorie d'origine.",
+              it: "Scoprite l'assortimento PPO. Ogni immagine è associata al prodotto e alla categoria corretti.",
+              es: "Descubra el catálogo de PPO. Cada imagen corresponde a su producto y categoría originales.",
+            })}
+            link={{ href: `/${locale}/products`, label: t(locale, "allCategories") }}
+          />
+          <CategoryTiles categories={categories} locale={locale} />
+        </div>
+      </section>
+
+      <section className="content-section network-section">
+        <div className="container">
+          <div className="split-feature">
+            <div className="split-feature-media photo-frame">
+              {topStory?.image && (
+                <Image
+                  src={topStory.image}
+                  alt={topStory.imageAlt}
+                  fill
+                  sizes="(max-width: 48rem) 100vw, 54vw"
+                />
+              )}
+            </div>
+            <div className="split-feature-content">
+              <span className="section-kicker">
+                {locale === "de" ? "Produzentennetzwerk" : "Producer network"}
+              </span>
+              <h2>
+                {locale === "de"
+                  ? "Beziehungen, die über Grenzen wachsen."
+                  : locale === "fr"
+                    ? "Des liens qui franchissent les frontières."
+                    : locale === "it"
+                      ? "Relazioni che superano i confini."
+                      : locale === "es"
+                        ? "Relaciones que cruzan fronteras."
+                        : "Relationships that travel well."}
+              </h2>
+              <p>
+                {locale === "de"
+                  ? "PPO arbeitet mit Produzenten aus rund 25 Ländern zusammen und pflegt ein weltweites Netzwerk."
+                  : locale === "fr"
+                    ? "PPO travaille avec des producteurs d'environ 25 pays et entretient un réseau international."
+                    : locale === "it"
+                      ? "PPO collabora con produttori di circa 25 paesi e mantiene una rete internazionale."
+                      : locale === "es"
+                        ? "PPO trabaja con productores de alrededor de 25 países y mantiene una red internacional."
+                        : "PPO works with producers in around 25 countries and maintains an international network."}
+              </p>
+              <Link className="text-link" href={`/${locale}/cooperation`}>
+                {locale === "de" ? "Zusammenarbeit" : "Working together"} →
+              </Link>
+            </div>
+          </div>
+          <div className="trust-row">
+            <div className="trust-item">
+              <strong>1946</strong>
+              <span>{locale === "de" ? "Beginn der Firmengeschichte" : "The company's roots"}</span>
+            </div>
+            <div className="trust-item">
+              <strong>1976</strong>
+              <span>{locale === "de" ? "Gründung der PPO" : "PPO established"}</span>
+            </div>
+            <div className="trust-item">
+              <strong>70+</strong>
+              <span>{locale === "de" ? "Jahre Erfahrung" : "Years of experience"}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="content-section quality-section">
+        <div className="container">
+          <SectionHeading
+            title={t(locale, "qualityTitle")}
+            description={t(locale, "qualityCopy")}
+          />
+          <div className="category-grid principle-grid">
+            {[
+              {
+                id: "quality",
+                title: t(locale, "quality"),
+                text: localizedText(locale, {
+                  de: "Internationale Standards, Lebensmittelsicherheit und Rückverfolgbarkeit.",
+                  en: "International standards, food safety and traceability.",
+                  fr: "Normes internationales, sécurité alimentaire et traçabilité.",
+                  it: "Standard internazionali, sicurezza alimentare e tracciabilità.",
+                  es: "Normas internacionales, seguridad alimentaria y trazabilidad.",
+                }),
+                href: `/${locale}/quality`,
+                image: ppo.pages.find((page) => page.id === "quality")?.images[0],
+                color: "leaf",
+              },
+              {
+                id: "sustainability",
+                title: t(locale, "sustainability"),
+                text: localizedText(locale, {
+                  de: "Klimaziele, Umweltprojekte und verantwortungsvolle Lieferketten.",
+                  en: "Climate goals, environmental projects and responsible supply chains.",
+                  fr: "Objectifs climatiques, projets environnementaux et chaînes d'approvisionnement responsables.",
+                  it: "Obiettivi climatici, progetti ambientali e filiere responsabili.",
+                  es: "Objetivos climáticos, proyectos ambientales y cadenas de suministro responsables.",
+                }),
+                href: `/${locale}/sustainability`,
+                image: ppo.pages.find((page) => page.id === "sustainability")?.images[0],
+                color: "orange",
+              },
+              {
+                id: "foundation",
+                title: "PPO Foundation",
+                text: localizedText(locale, {
+                  de: "Soziales Engagement und Projekte der PPO Gruppe.",
+                  en: "PPO Group community and social initiatives.",
+                  fr: "Engagement social et projets du groupe PPO.",
+                  it: "Impegno sociale e progetti del gruppo PPO.",
+                  es: "Compromiso social y proyectos del grupo PPO.",
+                }),
+                href: `/${locale}/foundation`,
+                image: ppo.pages.find((page) => page.id === "foundation")?.images[0],
+                color: "berry",
+              },
+            ].map((item) => (
+              <Link className={`principle-card principle-${item.color}`} href={item.href} key={item.id}>
+                {item.image && (
+                  <div className="principle-image">
+                    <Image src={item.image.src} alt={item.image.alt} fill sizes="(max-width: 48rem) 100vw, 30vw" />
+                  </div>
+                )}
+                <div>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                  <span className="text-link">{t(locale, "explore")} →</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="content-section news-section">
+        <div className="container">
+          <SectionHeading
+            kicker={t(locale, "news")}
+            title={t(locale, "latestStories")}
+            link={{ href: `/${locale}/news`, label: t(locale, "readArchive") }}
+          />
+          <div className="story-grid">
+            {ppo.news.slice(0, 3).map((story) => (
+              <StoryCard key={story.href} story={story} locale={locale} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="content-section closing-section">
+        <div className="container">
+          <div className="closing-panel">
+            <span className="section-kicker">{t(locale, "contact")}</span>
+            <h2>{t(locale, "partnershipTitle")}</h2>
+            <p>{t(locale, "partnershipCopy")}</p>
+            <Link className="button button-primary" href={`/${locale}/contact`}>
+              {t(locale, "getInTouch")}
+            </Link>
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}
+
+export function ProductsPage({
+  locale,
+  category,
+}: {
+  locale: Locale;
+  category?: PPOCategory;
+}) {
+  const categories = category ? [category] : ppo.categories;
+  const count = categories.reduce((total, item) => total + item.products.length, 0);
+
+  return (
+    <>
+      <PageIntro
+        locale={locale}
+        eyebrow={t(locale, "products")}
+        title={category ? localizedCategoryName(category, locale) : t(locale, "featuredProducts")}
+        description={
+          category?.description ||
+          localizedText(locale, {
+            de: "Frische Früchte und Gemüse aus dem internationalen PPO-Sortiment.",
+            en: "Fresh fruit and vegetables from PPO's international portfolio.",
+            fr: "Fruits et légumes frais de l'assortiment international de PPO.",
+            it: "Frutta e verdura fresca dall'assortimento internazionale di PPO.",
+            es: "Frutas y hortalizas frescas del catálogo internacional de PPO.",
+          })
+        }
+      />
+      {category?.unpublished && (
+        <div className="container content-section compact-section">
+          <div className="source-notice">
+            <p>{t(locale, "noCatalogueData")}</p>
+            <Link className="text-link" href={`/${locale}/contact`}>{t(locale, "getInTouch")} →</Link>
+          </div>
+        </div>
+      )}
+      {!category && (
+        <section className="container content-section category-index">
+          <div className="rail-heading">
+            <h2>{t(locale, "allCategories")}</h2>
+            <span className="catalog-count">{categories.length} {t(locale, "categories")}</span>
+          </div>
+          <CategoryTiles categories={categories} locale={locale} />
+        </section>
+      )}
+      <section className="container content-section products-listing">
+        <div className="rail-heading">
+          <h2>{category ? t(locale, "details") : t(locale, "products")}</h2>
+          <span className="catalog-count">{count} {t(locale, "productsCount")}</span>
+        </div>
+        <ProductCatalog
+          categories={ppo.categories}
+          locale={locale}
+          selectedCategory={category?.id}
+        />
+        {category?.sourcePageImages?.map((image) => (
+          <figure className="source-image" key={image.src}>
+            <Image src={image.src} alt={image.alt || localizedCategoryName(category, locale)} width={800} height={600} />
+          </figure>
+        ))}
+        {category?.documents?.map((document) => (
+          <a className="document-link category-flyer" href={document.href} key={document.source} target="_blank" rel="noreferrer">
+            <span>{document.label || "Bio Flyer"}</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+        ))}
+        {category && (
+          <p className="source-attribution">
+            <a href={`https://www.ppo.ch${category.sourcePath}`} target="_blank" rel="noreferrer">
+              {t(locale, "officialSource")} ↗
+            </a>
+          </p>
+        )}
+      </section>
+    </>
+  );
+}
+
+export function ProductPage({
+  locale,
+  category,
+  product,
+}: {
+  locale: Locale;
+  category: PPOCategory;
+  product: PPOProduct;
+}) {
+  return (
+    <div className="container content-section product-detail-wrap">
+      <nav className="breadcrumbs" aria-label={t(locale, "siteNavigation")}>
+        <Link href={`/${locale}`}>{t(locale, "home")}</Link>
+        <span aria-hidden="true">/</span>
+        <Link href={`/${locale}/products`}>{t(locale, "products")}</Link>
+        <span aria-hidden="true">/</span>
+        <Link href={`/${locale}/products/${category.id}`}>{localizedCategoryName(category, locale)}</Link>
+      </nav>
+      <ProductDetail category={category} product={product} locale={locale} />
+      <p className="source-attribution">
+        <a href={`https://www.ppo.ch${category.sourcePath}`} target="_blank" rel="noreferrer">
+          {t(locale, "officialSource")} ↗
+        </a>
+      </p>
+    </div>
+  );
+}
+
+export function NewsPage({ locale }: { locale: Locale }) {
+  return (
+    <>
+      <PageIntro
+        locale={locale}
+        eyebrow={t(locale, "news")}
+        title={localizedText(locale, {
+          de: "Geschichten aus dem PPO-Netzwerk.",
+          en: "Stories from the PPO network.",
+          fr: "Les histoires du réseau PPO.",
+          it: "Storie dalla rete PPO.",
+          es: "Historias de la red PPO.",
+        })}
+        description={localizedText(locale, {
+          de: "Unternehmensnews, Produzentenbesuche und aktuelle Einblicke aus dem Fruchthandel.",
+          en: "Company news, producer visits and updates from fresh produce trading.",
+          fr: "Actualités de l'entreprise, visites chez les producteurs et nouvelles du commerce des fruits et légumes.",
+          it: "Notizie aziendali, visite ai produttori e aggiornamenti sul commercio ortofrutticolo.",
+          es: "Noticias de la empresa, visitas a productores y novedades del comercio de frutas y hortalizas.",
+        })}
+      />
+      <section className="container content-section archive-section">
+        <NewsArchive stories={ppo.news} locale={locale} />
+        <p className="source-attribution">
+          <a href="https://www.ppo.ch/news" target="_blank" rel="noreferrer">{t(locale, "officialSource")} · News ↗</a>
+        </p>
+      </section>
+    </>
+  );
+}
+
+export function NewsDetailPage({
+  locale,
+  story,
+}: {
+  locale: Locale;
+  story: NewsStory;
+}) {
+  const translation = story.translations?.[locale];
+  const title = translation?.title ?? story.title;
+  const blocks = translation?.blocks ?? story.blocks;
+  const sourceArticle = story.localizedPaths?.[locale] ?? story.href;
+
+  return (
+    <>
+      <header className="page-hero container news-detail-head">
+        <div className="page-hero-inner">
+          <div>
+            <span className="section-kicker">{t(locale, "news")}</span>
+            <h1>{title}</h1>
+          </div>
+          <p>{story.date}</p>
+        </div>
+      </header>
+      <article className="container content-section news-article">
+        {story.image && (
+          <figure className="news-detail-image">
+            <Image src={story.image} alt={story.imageAlt} fill priority sizes="(max-width: 48rem) 100vw, 80vw" />
+          </figure>
+        )}
+        {blocks?.length ? (
+          <div className="content-prose">
+            {blocks.map((block, index) => {
+              if (block.type === "h1") return null;
+              if (block.type === "h2") return <h2 key={index}>{block.text}</h2>;
+              if (block.type === "h3" || block.type === "h4") return <h3 key={index}>{block.text}</h3>;
+              if (block.type === "li") return <p className="article-list-item" key={index}>• {block.text}</p>;
+              return <p key={index}>{block.text}</p>;
+            })}
+          </div>
+        ) : (
+          <div className="content-prose">
+            <p>{story.excerpt}</p>
+            <p>{t(locale, "availableInGerman")}</p>
+          </div>
+        )}
+        <p className="source-attribution">
+          <a href={sourceArticle} target="_blank" rel="noreferrer">{t(locale, "sourceArticle")} ↗</a>
+        </p>
+      </article>
+    </>
+  );
+}
+
+export function ContactPage({
+  locale,
+  initialProduct = "",
+  initialEnquiry = "",
+}: {
+  locale: Locale;
+  initialProduct?: string;
+  initialEnquiry?: string;
+}) {
+  return (
+    <>
+      <PageIntro
+        locale={locale}
+        eyebrow={t(locale, "contact")}
+        title={t(locale, "contactHeading")}
+        description={t(locale, "contactIntro")}
+      />
+      <section className="container content-section contact-section">
+        <div className="contact-heading">
+          <span className="section-kicker">PPO Services AG</span>
+          <p>{t(locale, "contactIntro")}</p>
+        </div>
+        <ContactForm
+          locale={locale}
+          initialProduct={initialProduct}
+          initialEnquiry={initialEnquiry}
+          categories={ppo.categories.map((category) => ({
+            id: category.id,
+            name: localizedCategoryName(category, locale),
+          }))}
+        />
+      </section>
+    </>
+  );
+}
+
+function PageBlocks({ page, locale }: { page: SourcePage; locale: Locale }) {
+  const content = localizedPageCopy(page, locale);
+  return (
+    <div className="content-prose">
+      {content.blocks.map((block, index) => {
+        if (block.type === "h1") return null;
+        if (block.type === "h2") return <h2 key={`${index}-${block.text}`}>{block.text}</h2>;
+        if (block.type === "h3" || block.type === "h4") return <h3 key={`${index}-${block.text}`}>{block.text}</h3>;
+        if (block.type === "li") return <p className="article-list-item" key={`${index}-${block.text}`}>• {block.text}</p>;
+        return <p key={`${index}-${block.text}`}>{block.text}</p>;
+      })}
+    </div>
+  );
+}
+
+export function OfficialContentPage({
+  page,
+  locale,
+}: {
+  page: SourcePage;
+  locale: Locale;
+}) {
+  const copy = localizedPageCopy(page, locale);
+  const hasTranslation = Boolean(page.translations?.[locale]) || locale === "de";
+  const sourcePath = page.localizedPaths[locale] ?? page.sourcePath;
+  return (
+    <>
+      <PageIntro
+        locale={locale}
+        eyebrow={page.id === "privacy" || page.id === "legal" ? t(locale, "legal") : t(locale, "company")}
+        title={copy.blocks.find((block) => block.type === "h1")?.text ?? page.name}
+        description={page.id === "company" ? t(locale, "companyIntro") : undefined}
+      />
+      <section className="container content-section official-content">
+        {!hasTranslation && (
+          <div className="source-notice">
+            <p>{t(locale, "availableInGerman")}</p>
+            <a className="text-link" href={`https://www.ppo.ch${sourcePath}`} target="_blank" rel="noreferrer">
+              {t(locale, "officialSource")} ↗
+            </a>
+          </div>
+        )}
+        {page.images.length > 0 && (
+          <div className={`source-gallery${page.images.length === 1 ? " source-gallery-single" : ""}`}>
+            {page.images.map((image) => (
+              <figure className="source-image" key={image.src}>
+                <Image src={image.src} alt={image.alt || page.name} width={980} height={680} />
+              </figure>
+            ))}
+          </div>
+        )}
+        <PageBlocks page={page} locale={locale} />
+        {page.documents.length > 0 && (
+          <div className="official-documents">
+            <h2>{locale === "de" ? "Dokumente" : "Documents"}</h2>
+            <ul className="document-list">
+              {page.documents.map((document) => (
+                <li key={document.source}>
+                  <a className="document-link" href={document.href} target="_blank" rel="noreferrer">
+                    <span>{document.label || document.source.split("/").pop()}</span>
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <p className="source-attribution">
+          <a href={`https://www.ppo.ch${sourcePath}`} target="_blank" rel="noreferrer">{t(locale, "officialSource")} ↗</a>
+        </p>
+      </section>
+    </>
+  );
+}
+
+export function TeamPage({
+  locale,
+  group,
+}: {
+  locale: Locale;
+  group?: PeopleGroup;
+}) {
+  const groups = group ? [group] : ppo.peopleGroups;
+  return (
+    <>
+      <PageIntro
+        locale={locale}
+        eyebrow={t(locale, "team")}
+        title={group?.names?.[locale] ?? (locale === "de" ? "Menschen, die PPO verbinden." : "The people behind PPO.")}
+        description={localizedText(locale, {
+          de: "Geschäftsleitung, Handel, Administration, IT, Qualität, Medien und internationale Vertretungen.",
+          en: "Management, trade, administration, IT, quality, media and international representatives.",
+          fr: "Direction, commercialisation, administration, informatique, qualité, médias et représentations internationales.",
+          it: "Direzione, commercializzazione, amministrazione, IT, qualità, media e rappresentanze internazionali.",
+          es: "Dirección, comercialización, administración, informática, calidad, medios y representaciones internacionales.",
+        })}
+      />
+      <section className="container content-section">
+        <div className="team-groups">
+          {groups.map((item) => (
+            <section className="team-group" key={item.id}>
+              <div className="rail-heading">
+                <h2>{item.names?.[locale] ?? item.name}</h2>
+                <span className="catalog-count">{item.people.length}</span>
+              </div>
+              <div className="team-grid">
+                {item.people.map((person) => (
+                  <article className="person-card" id={person.sourceId ?? undefined} key={`${item.id}-${person.name}`}>
+                    {person.image ? (
+                      <Image
+                        className="person-photo"
+                        src={person.image}
+                        alt={person.name}
+                        width={240}
+                        height={300}
+                      />
+                    ) : (
+                      <div className="person-photo image-fallback" aria-hidden="true">
+                        {person.name.slice(0, 1)}
+                      </div>
+                    )}
+                    <div className="person-content">
+                      <h3>{person.name}</h3>
+                      {(person.roleTranslations?.[locale] ?? person.role) && (
+                        <p className="person-title">
+                          {person.roleTranslations?.[locale] ?? person.role}
+                        </p>
+                      )}
+                      <div className="person-lines">
+                        {person.phone && <a href={`tel:${person.phone.replace(/[^\d+]/g, "")}`}>T {person.phone}</a>}
+                        {person.mobile && <a href={`tel:${person.mobile.replace(/[^\d+]/g, "")}`}>M {person.mobile}</a>}
+                        {person.email && <a href={`mailto:${person.email}`}>{person.email}</a>}
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+        <p className="source-attribution">
+          <a href={`https://www.ppo.ch${group?.sourcePath ?? "/firma/team/geschaeftsleitung"}`} target="_blank" rel="noreferrer">{t(locale, "officialSource")} ↗</a>
+        </p>
+      </section>
+    </>
+  );
+}
+
+export function CareerPage({ locale }: { locale: Locale }) {
+  const page = ppo.pages.find((item) => item.id === "careers");
+  return page ? <OfficialContentPage page={page} locale={locale} /> : (
+    <>
+      <PageIntro locale={locale} eyebrow={t(locale, "careers")} title={t(locale, "careers")} />
+      <section className="container content-section">
+        <p>{t(locale, "noRoles")} <a href="mailto:info@ppo.ch">info@ppo.ch</a>.</p>
+      </section>
+    </>
+  );
+}
+
+export function TeamBreadcrumb({
+  locale,
+  category,
+  product,
+}: {
+  locale: Locale;
+  category: PPOCategory;
+  product: PPOProduct;
+}) {
+  return (
+    <nav className="breadcrumbs" aria-label={t(locale, "siteNavigation")}>
+      <Link href={`/${locale}`}>{t(locale, "home")}</Link>
+      <span aria-hidden="true">/</span>
+      <Link href={`/${locale}/products`}>{t(locale, "products")}</Link>
+      <span aria-hidden="true">/</span>
+      <Link href={`/${locale}/products/${category.id}`}>{localizedCategoryName(category, locale)}</Link>
+      <span aria-hidden="true">/</span>
+      <span>{product.name}</span>
+    </nav>
+  );
+}
+
+export function articleSlug(story: NewsStory) {
+  return newsSlug(story);
+}

@@ -1,0 +1,56 @@
+:root {
+  --color-paper: oklch(97% 0.012 104);
+  --color-paper-raised: oklch(99% 0.008 104);
+  --color-paper-tint: oklch(94% 0.022 116);
+  --color-ink: oklch(22% 0.025 145);
+  --color-ink-soft: oklch(40% 0.025 140);
+  --color-muted: oklch(51% 0.025 130);
+  --color-line: oklch(83% 0.022 123);
+  --color-leaf: #94c11a;
+  --color-leaf-dark: #4c6413;
+  --color-lime: #c7d300;
+  --color-citrus: #fbb900;
+  --color-orange: #ec6500;
+  --color-red: #e53009;
+  --color-berry: #a51d49;
+  --color-violet: #704b8f;
+  --color-focus: #4c6413;
+  --color-error: #c5220c;
+  --color-success: #427813;
+
+  --font-display: "DM Serif Display", Georgia, serif;
+  --font-body: "Ubuntu", ui-sans-serif, sans-serif;
+
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4.5rem;
+  --space-3xl: 7rem;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.625rem;
+  --text-2xl: 2.25rem;
+  --text-display: clamp(2.75rem, 6vw, 6.25rem);
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-short: 180ms;
+  --dur-medium: 320ms;
+
+  --radius-control: 0.875rem;
+  --radius-card: 1.5rem;
+  --radius-feature: 2rem;
+  --radius-pill: 999px;
+  --glass-fill: oklch(99% 0.008 104 / 0.78);
+  --glass-line: oklch(100% 0 0 / 0.74);
+  --shadow-soft: 0 24px 70px oklch(29% 0.05 146 / 0.12);
+  --shadow-float: 0 14px 42px oklch(29% 0.05 146 / 0.1);
+}
