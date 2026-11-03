@@ -33,12 +33,21 @@ export function SiteHeader({
   const [productsOpen, setProductsOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [query, setQuery] = useState("");
   const productPopoverRef = useRef<HTMLDivElement>(null);
+  const menuToggleRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     document.documentElement.lang = locale;
   }, [locale]);
+
+  useEffect(() => {
+    const updateScrollState = () => setScrolled(window.scrollY > 24);
+    updateScrollState();
+    window.addEventListener("scroll", updateScrollState, { passive: true });
+    return () => window.removeEventListener("scroll", updateScrollState);
+  }, []);
 
   const results = useMemo(() => {
     const term = query.trim().toLocaleLowerCase(locale);
@@ -56,15 +65,26 @@ export function SiteHeader({
     if (!searchOpen && !mobileOpen && !languageOpen && !productsOpen) return;
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        const closeMobileMenu = mobileOpen;
         setSearchOpen(false);
         setMobileOpen(false);
         setLanguageOpen(false);
         setProductsOpen(false);
+        if (closeMobileMenu) menuToggleRef.current?.focus();
       }
     };
     document.addEventListener("keydown", closeOnEscape);
     return () => document.removeEventListener("keydown", closeOnEscape);
   }, [languageOpen, mobileOpen, productsOpen, searchOpen]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [mobileOpen]);
 
   useEffect(() => {
     if (!productsOpen) return;
@@ -92,7 +112,9 @@ export function SiteHeader({
   function changeLanguage(nextLocale: Locale) {
     const pathnameParts = (pathname || `/${locale}`).split("/");
     pathnameParts[1] = nextLocale;
-    router.push(pathnameParts.join("/") || `/${nextLocale}`);
+    router.push(
+      `${pathnameParts.join("/") || `/${nextLocale}`}${window.location.search}${window.location.hash}`,
+    );
     setLanguageOpen(false);
     setMobileOpen(false);
   }
@@ -106,9 +128,9 @@ export function SiteHeader({
   return (
     <>
       <a className="skip-link" href="#main-content">
-        Skip to content
+        {t(locale, "skipToContent")}
       </a>
-      <header className="site-header">
+      <header className="site-header" data-scrolled={scrolled}>
         <div className="container">
           <div className="nav-glass">
             <Link
@@ -136,6 +158,7 @@ export function SiteHeader({
                 <button
                   className="nav-link nav-products-toggle"
                   type="button"
+                  aria-haspopup="true"
                   aria-expanded={productsOpen}
                   aria-controls="product-mega-menu"
                   onClick={() => setProductsOpen((open) => !open)}
@@ -206,6 +229,13 @@ export function SiteHeader({
               <Link className="nav-link" href={`/${locale}/contact`} onClick={closeMenus}>
                 {t(locale, "contact")}
               </Link>
+              <Link
+                className="button button-primary mobile-nav-contact"
+                href={`/${locale}/contact`}
+                onClick={closeMenus}
+              >
+                {t(locale, "getInTouch")}
+              </Link>
             </nav>
 
             <div className="nav-actions">
@@ -213,6 +243,7 @@ export function SiteHeader({
                 <button
                   className="nav-action nav-locale"
                   type="button"
+                  aria-haspopup="true"
                   aria-expanded={languageOpen}
                   aria-controls="language-menu"
                   onClick={() => setLanguageOpen((open) => !open)}
@@ -250,7 +281,17 @@ export function SiteHeader({
                   closeMenus();
                 }}
               >
-                <span aria-hidden="true">⌕</span>
+                <svg
+                  aria-hidden="true"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.4"
+                  strokeLinecap="round"
+                >
+                  <circle cx="10.8" cy="10.8" r="6.8" />
+                  <path d="m16 16 4.2 4.2" />
+                </svg>
                 <span className="search-word">{t(locale, "search")}</span>
               </button>
               <Link
@@ -263,6 +304,8 @@ export function SiteHeader({
               <button
                 className="menu-toggle"
                 type="button"
+                id="mobile-menu-toggle"
+                ref={menuToggleRef}
                 aria-label={mobileOpen ? t(locale, "closeMenu") : t(locale, "openMenu")}
                 aria-expanded={mobileOpen}
                 aria-controls="primary-navigation"
@@ -293,7 +336,17 @@ export function SiteHeader({
               {t(locale, "search")}
             </h2>
             <div className="search-input-wrap">
-              <span aria-hidden="true">⌕</span>
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.4"
+                strokeLinecap="round"
+              >
+                <circle cx="10.8" cy="10.8" r="6.8" />
+                <path d="m16 16 4.2 4.2" />
+              </svg>
               <input
                 autoComplete="off"
                 id="site-search-input"

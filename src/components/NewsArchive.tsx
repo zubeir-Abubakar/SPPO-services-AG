@@ -49,12 +49,11 @@ function paginationLabel(locale: Locale, direction: "previous" | "next") {
 const pageSize = 12;
 
 function StoryCard({ story, locale }: { story: NewsStory; locale: Locale }) {
-  const title =
-    story.translations?.[locale]?.title ??
-    t(locale, "contentUnavailableTitle");
+  const translation = story.translations?.[locale];
+  const title = translation?.title ?? story.title;
   const excerpt =
-    story.translations?.[locale]?.blocks.find((block) => block.type === "p")?.text ??
-    t(locale, "availableInGerman");
+    translation?.blocks.find((block) => block.type === "p")?.text ??
+    story.excerpt;
   const href = `/${locale}/news/${newsSlug(story)}`;
 
   return (
@@ -77,7 +76,7 @@ function StoryCard({ story, locale }: { story: NewsStory; locale: Locale }) {
           <span>{localizedTopic(story, locale)}</span>
         </div>
         <h3><Link href={href}>{title}</Link></h3>
-        <p>{excerpt}</p>
+        <p>{translation ? excerpt : t(locale, "newsOriginalLanguage")}</p>
         <Link className="text-link" href={href}>{t(locale, "explore")} →</Link>
       </div>
     </article>
@@ -94,11 +93,15 @@ export function NewsArchive({
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState("all");
   const [page, setPage] = useState(1);
+  const availableStories = useMemo(
+    () => stories.filter((story) => locale === "de" || story.translations?.[locale]),
+    [locale, stories],
+  );
   const filtered = useMemo(() => {
     const term = query.trim().toLocaleLowerCase(locale);
-    return stories.filter((story) => {
+    return availableStories.filter((story) => {
       const translation = story.translations?.[locale];
-      const title = translation?.title ?? t(locale, "contentUnavailableTitle");
+      const title = translation?.title ?? story.title;
       const excerpt =
         translation?.blocks.find((block) => block.type === "p")?.text ??
         t(locale, "availableInGerman");
@@ -106,7 +109,7 @@ export function NewsArchive({
         !term || `${title} ${excerpt}`.toLocaleLowerCase(locale).includes(term);
       return matchesQuery && (filter === "all" || topic(story) === filter);
     });
-  }, [filter, locale, query, stories]);
+  }, [availableStories, filter, locale, query]);
   const pageCount = Math.max(1, Math.ceil(filtered.length / pageSize));
   const currentPage = Math.min(page, pageCount);
   const visible = filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
@@ -155,7 +158,9 @@ export function NewsArchive({
           ))}
         </div>
       ) : (
-        <div className="empty-state">{t(locale, "noSearchResults")}</div>
+        <div className="empty-state">
+          {availableStories.length ? t(locale, "noSearchResults") : t(locale, "noNewsAvailableInLanguage")}
+        </div>
       )}
       {pageCount > 1 && (
         <nav className="pagination" aria-label={t(locale, "news")}>

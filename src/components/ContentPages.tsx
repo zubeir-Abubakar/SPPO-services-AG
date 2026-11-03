@@ -514,8 +514,10 @@ export function NewsDetailPage({
   story: NewsStory;
 }) {
   const translation = story.translations?.[locale];
-  const title =
-    translation?.title ?? t(locale, "contentUnavailableTitle");
+  const hasTranslation = Boolean(translation) || locale === "de";
+  const title = hasTranslation
+    ? translation?.title ?? story.title
+    : t(locale, "newsOriginalLanguage");
   const blocks = translation?.blocks ?? story.blocks;
   const sourceArticle = story.localizedPaths?.[locale] ?? story.href;
 
@@ -536,7 +538,7 @@ export function NewsDetailPage({
             <Image src={story.image} alt={story.imageAlt} fill priority sizes="(max-width: 48rem) 100vw, 80vw" />
           </figure>
         )}
-        {blocks?.length ? (
+        {hasTranslation && blocks?.length ? (
           <div className="content-prose">
             {blocks.map((block, index) => {
               if (block.type === "h1") return null;
@@ -546,11 +548,11 @@ export function NewsDetailPage({
               return <p key={index}>{block.text}</p>;
             })}
           </div>
-        ) : (
+        ) : !hasTranslation ? (
           <div className="content-prose">
             <p>{t(locale, "availableInGerman")}</p>
           </div>
-        )}
+        ) : null}
         <p className="source-attribution">
           <a href={sourceArticle} target="_blank" rel="noreferrer">{t(locale, "sourceArticle")} ↗</a>
         </p>
@@ -610,6 +612,200 @@ function PageBlocks({ page, locale }: { page: SourcePage; locale: Locale }) {
   );
 }
 
+function QualityPage({ page, locale }: { page: SourcePage; locale: Locale }) {
+  const copy = localizedPageCopy(page, locale);
+  const sections: { title: string; blocks: typeof copy.blocks }[] = [];
+  let activeSection: (typeof sections)[number] | undefined;
+  for (const block of copy.blocks) {
+    if (block.type === "h2") {
+      activeSection = { title: block.text, blocks: [] };
+      sections.push(activeSection);
+    } else if (activeSection && block.type !== "h1") {
+      activeSection.blocks.push(block);
+    }
+  }
+
+  const safetySection = sections[0];
+  const temperatureSection = sections[3];
+  const climateDocument = page.documents[0];
+  const certificates = page.images.slice(1);
+  const certificateDetails = [
+    { match: "IFS_BROCKER", title: "certificateTitleIfsBroker", owner: "ppo" },
+    { match: "Fairtrade_PPO", title: "certificateTitleFairtrade", owner: null },
+    { match: "AMS_Zertifikat", title: "certificateTitleAms", owner: null },
+    { match: "PPO_CoC_Certificate", title: "certificateTitleGlobalGap", owner: "ppo" },
+    { match: "BIO_CH-Verordnung", title: "certificateTitleBio", owner: "ppo" },
+    { match: "Swiss_GAP", title: "certificateTitleSwissGap", owner: "wfs" },
+  ] as const;
+  const swissRegulations = [
+    {
+      label: t(locale, "swissFoodLaw"),
+      href: "https://www.fedlex.admin.ch/eli/cc/2017/62/de",
+    },
+    {
+      label: t(locale, "swissResidueRegulation"),
+      href: "https://www.fedlex.admin.ch/eli/cc/2017/151/de",
+    },
+    {
+      label: t(locale, "swissOrganicRegulation"),
+      href: "https://www.fedlex.admin.ch/eli/cc/1997/2498_2498_2498/de",
+    },
+  ];
+
+  return (
+    <>
+      <header className="quality-hero container">
+        <div className="quality-hero-copy">
+          <span className="section-kicker">{t(locale, "quality")}</span>
+          <h1>{t(locale, "qualityPageTitle")}</h1>
+          <p>{copy.blocks.find((block) => block.type === "p")?.text}</p>
+        </div>
+        {page.images[0] && (
+          <figure className="quality-hero-image">
+            <Image
+              src={page.images[0].src}
+              alt={page.images[0].alt || t(locale, "qualityPageTitle")}
+              fill
+              priority
+              sizes="(max-width: 48rem) 100vw, 48vw"
+            />
+          </figure>
+        )}
+      </header>
+
+      <section className="container quality-content">
+        {safetySection && (
+          <section className="quality-safety">
+            <div className="quality-section-heading">
+              <span className="section-kicker">{t(locale, "quality")}</span>
+              <h2>{t(locale, "foodSafety")}</h2>
+            </div>
+            <div className="quality-safety-copy content-prose">
+              {safetySection.blocks.map((block, index) => (
+                <p key={`${index}-${block.text}`}>{block.text}</p>
+              ))}
+            </div>
+          </section>
+        )}
+
+        <section className="quality-regulations">
+          <div className="quality-section-heading">
+            <span className="section-kicker">{t(locale, "qualityContext")}</span>
+            <h2>{sections[1]?.title}</h2>
+          </div>
+          <div className="regulation-grid">
+            <article className="regulation-card">
+              <h3>{sections[1]?.title}</h3>
+              <ul>
+                {swissRegulations.map((regulation) => (
+                  <li key={regulation.href}>
+                    <a href={regulation.href} target="_blank" rel="noreferrer">
+                      {regulation.label}<span aria-hidden="true">↗</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </article>
+            <article className="regulation-card">
+              <h3>{sections[2]?.title}</h3>
+              <a
+                href="https://food.ec.europa.eu/plants/pesticides/eu-pesticides-database_en"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {t(locale, "euPesticideDatabase")}<span aria-hidden="true">↗</span>
+              </a>
+            </article>
+          </div>
+        </section>
+
+        {temperatureSection && (
+          <section className="quality-temperature">
+            <div className="quality-section-heading">
+              <span className="section-kicker">{t(locale, "quality")}</span>
+              <h2>{temperatureSection.title}</h2>
+            </div>
+            <p>{temperatureSection.blocks.find((block) => block.type === "p")?.text}</p>
+            {climateDocument && (
+              <a
+                className="climate-document-card"
+                href={climateDocument.href}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span className="document-mark" aria-hidden="true">PDF</span>
+                <span className="climate-document-copy">
+                  <strong>{climateDocument.label}</strong>
+                  <small>{t(locale, "climateGuidelineDescription")}</small>
+                </span>
+                <span className="document-open" aria-label={t(locale, "documents")}>↗</span>
+              </a>
+            )}
+          </section>
+        )}
+
+        <section className="quality-certificates">
+          <div className="quality-section-heading">
+            <span className="section-kicker">{t(locale, "quality")}</span>
+            <h2>{sections[4]?.title}</h2>
+            <p>{t(locale, "certificateUnknownOwner")}</p>
+          </div>
+          <div className="certificate-grid">
+            {certificates.map((image) => {
+              const details = certificateDetails.find((item) =>
+                image.src.includes(item.match),
+              );
+              const ownership =
+                details?.owner === "ppo"
+                  ? t(locale, "certificateOwnerPpo")
+                  : details?.owner === "wfs"
+                    ? t(locale, "certificateOwnerWfs")
+                    : t(locale, "certificateUnknownOwner");
+              const title = t(locale, details?.title ?? "documents");
+              return (
+                <article className="certificate-card" key={image.src}>
+                  <a
+                    className="certificate-preview"
+                    href={image.src}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`${t(locale, "certificateOpen")}: ${title}`}
+                  >
+                    <Image
+                      src={image.src}
+                      alt={image.alt || title}
+                      fill
+                      sizes="(max-width: 38rem) 100vw, (max-width: 62rem) 50vw, 25vw"
+                    />
+                  </a>
+                  <div className="certificate-copy">
+                    <h3>{title}</h3>
+                    <p>{ownership}</p>
+                    <a href={image.src} target="_blank" rel="noreferrer">
+                      {t(locale, "certificateOpen")} <span aria-hidden="true">↗</span>
+                    </a>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="quality-cta">
+          <div>
+            <span className="section-kicker">{t(locale, "quality")}</span>
+            <h2>{t(locale, "qualityCtaTitle")}</h2>
+            <p>{t(locale, "qualityCtaCopy")}</p>
+          </div>
+          <Link className="button button-primary" href={`/${locale}/contact`}>
+            {t(locale, "contact")} <span aria-hidden="true">↗</span>
+          </Link>
+        </section>
+      </section>
+    </>
+  );
+}
+
 export function OfficialContentPage({
   page,
   locale,
@@ -617,18 +813,36 @@ export function OfficialContentPage({
   page: SourcePage;
   locale: Locale;
 }) {
+  if (page.id === "quality") {
+    return <QualityPage page={page} locale={locale} />;
+  }
+
   const hasTranslation = Boolean(page.translations?.[locale]) || locale === "de";
   const copy = hasTranslation
     ? localizedPageCopy(page, locale)
     : { title: t(locale, "contentUnavailableTitle"), blocks: [] };
   const sourcePath = page.localizedPaths[locale] ?? page.sourcePath;
+  const editorialImage =
+    hasTranslation &&
+    page.images.length === 1 &&
+    ["company", "history", "sustainability", "cooperation", "careers"].includes(page.id)
+      ? page.images[0]
+      : undefined;
   return (
     <>
       <PageIntro
         locale={locale}
         eyebrow={page.id === "privacy" || page.id === "legal" ? t(locale, "legal") : t(locale, "company")}
-        title={copy.blocks.find((block) => block.type === "h1")?.text ?? copy.title}
-        description={page.id === "company" ? t(locale, "companyIntro") : undefined}
+        title={
+          hasTranslation
+            ? copy.blocks.find((block) => block.type === "h1")?.text ?? copy.title
+            : t(locale, "contentUnavailableTitle")
+        }
+        description={
+          hasTranslation && page.id === "company"
+            ? t(locale, "companyIntro")
+            : undefined
+        }
       />
       <section className="container content-section official-content">
         {!hasTranslation && (
@@ -639,7 +853,19 @@ export function OfficialContentPage({
             </a>
           </div>
         )}
-        {page.images.length > 0 && (
+        {editorialImage ? (
+          <div className="editorial-page">
+            <figure className="editorial-page-image">
+              <Image
+                src={editorialImage.src}
+                alt={editorialImage.alt || copy.title}
+                fill
+                sizes="(max-width: 48rem) 100vw, 45vw"
+              />
+            </figure>
+            <PageBlocks page={page} locale={locale} />
+          </div>
+        ) : page.images.length > 0 ? (
           <div className={`source-gallery${page.images.length === 1 ? " source-gallery-single" : ""}`}>
             {page.images.map((image) => (
               <figure className="source-image" key={image.src}>
@@ -647,8 +873,8 @@ export function OfficialContentPage({
               </figure>
             ))}
           </div>
-        )}
-        {hasTranslation && <PageBlocks page={page} locale={locale} />}
+        ) : null}
+        {hasTranslation && !editorialImage && <PageBlocks page={page} locale={locale} />}
         {hasTranslation && page.documents.length > 0 && (
           <div className="official-documents">
             <h2>{t(locale, "documents")}</h2>

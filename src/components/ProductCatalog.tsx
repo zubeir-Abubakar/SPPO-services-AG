@@ -143,11 +143,20 @@ export function ProductCatalog({
     return categories.flatMap((category) =>
       category.products
         .filter((product) => {
+          const searchableText = [
+            product.name,
+            ...Object.values(product.names ?? {}),
+            localizedCategoryName(category, locale),
+            ...product.origins.flatMap((item) => [
+              item.country,
+              ...Object.values(item.countryNames ?? {}),
+            ]),
+            ...productManagers(product).map((manager) => manager.name),
+          ]
+            .join(" ")
+            .toLocaleLowerCase(locale);
           const matchesTerm =
-            !term ||
-            `${product.name} ${Object.values(product.names ?? {}).join(" ")} ${localizedCategoryName(category, locale)}`
-              .toLocaleLowerCase(locale)
-              .includes(term);
+            !term || searchableText.includes(term);
           const matchesOrigin =
             !origin ||
             product.origins.some((item) => item.country === origin);
