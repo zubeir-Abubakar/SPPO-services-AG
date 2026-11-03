@@ -78,7 +78,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/salate"
+          "sourcePath": "/produkte/salate",
+          "names": {
+            "de": "Eisberg",
+            "en": "Iceberg",
+            "fr": "Iceberg",
+            "it": "Iceberg",
+            "es": "Iceberg"
+          }
         },
         {
           "name": "Endivien",
@@ -129,7 +136,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/salate"
+          "sourcePath": "/produkte/salate",
+          "names": {
+            "de": "Endivien",
+            "en": "Endive",
+            "fr": "Escarole",
+            "it": "Scarola",
+            "es": "Escarola"
+          }
         },
         {
           "name": "Kopfsalat",
@@ -178,7 +192,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/salate"
+          "sourcePath": "/produkte/salate",
+          "names": {
+            "de": "Kopfsalat",
+            "en": "Lettuce",
+            "fr": "Laitue pommée",
+            "it": "Trocadero",
+            "es": "Trocadero"
+          }
         },
         {
           "name": "Batavia",
@@ -229,7 +250,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/salate"
+          "sourcePath": "/produkte/salate",
+          "names": {
+            "de": "Batavia",
+            "en": "Batavia",
+            "fr": "Batavia",
+            "it": "Batavia",
+            "es": "Batavia"
+          }
         },
         {
           "name": "Baby Leaf",
@@ -280,7 +308,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/salate"
+          "sourcePath": "/produkte/salate",
+          "names": {
+            "de": "Baby Leaf",
+            "en": "Baby Leaf",
+            "fr": "Baby Leaf",
+            "it": "Baby Leaf",
+            "es": "Baby Leaf"
+          }
         },
         {
           "name": "Eichblatt",
@@ -331,7 +366,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/salate"
+          "sourcePath": "/produkte/salate",
+          "names": {
+            "de": "Eichblatt",
+            "en": "curled lettuce",
+            "fr": "Feuille de chêne",
+            "it": "Foglie di quercia",
+            "es": "Hoja de roble"
+          }
         },
         {
           "name": "Lattich",
@@ -383,7 +425,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/salate"
+          "sourcePath": "/produkte/salate",
+          "names": {
+            "de": "Lattich",
+            "en": "Romana",
+            "fr": "Romaine",
+            "it": "Romana",
+            "es": "Romana"
+          }
         },
         {
           "name": "Little Gem",
@@ -435,7 +484,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/salate"
+          "sourcePath": "/produkte/salate",
+          "names": {
+            "de": "Little Gem",
+            "en": "Little Gem",
+            "fr": "Little Gem",
+            "it": "Little Gem",
+            "es": "Little Gem"
+          }
         },
         {
           "name": "Lollo",
@@ -486,7 +542,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/salate"
+          "sourcePath": "/produkte/salate",
+          "names": {
+            "de": "Lollo",
+            "en": "Lollo",
+            "fr": "Lollo",
+            "it": "Lollo",
+            "es": "Lollo"
+          }
         }
       ],
       "cover": "/ppo/fileadmin/_processed_/c/c/csm_1_Eisberg_1c66fa0560.webp"
@@ -559,7 +622,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/agrumen"
+          "sourcePath": "/produkte/agrumen",
+          "names": {
+            "de": "Blutorangen",
+            "en": "Blood oranges",
+            "fr": "Sanguines",
+            "it": "Sanguigne",
+            "es": "Sanguinas"
+          }
         },
         {
           "name": "Easy Peeler",
@@ -669,7 +739,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/agrumen"
+          "sourcePath": "/produkte/agrumen",
+          "names": {
+            "de": "Easy Peeler",
+            "en": "Easy Peeler",
+            "fr": "Easy Peeler",
+            "it": "Easy Peeler",
+            "es": "Easy Peeler"
+          }
         },
         {
           "name": "Grapefruits",
@@ -782,7 +859,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/agrumen"
+          "sourcePath": "/produkte/agrumen",
+          "names": {
+            "de": "Grapefruits",
+            "en": "Grapefruits",
+            "fr": "Grapefruits",
+            "it": "Pompelmi",
+            "es": "Pomelos"
+          }
         },
         {
           "name": "Mandarinen",
@@ -859,7 +943,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/agrumen"
+          "sourcePath": "/produkte/agrumen",
+          "names": {
+            "de": "Mandarinen",
+            "en": "Mandarins",
+            "fr": "Mandarines",
+            "it": "Mandarini",
+            "es": "Mandarinas"
+          }
         },
         {
           "name": "Orangen",
@@ -999,7 +1090,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/agrumen"
+          "sourcePath": "/produkte/agrumen",
+          "names": {
+            "de": "Orangen",
+            "en": "Oranges",
+            "fr": "Oranges",
+            "it": "Arance",
+            "es": "Naranjas"
+          }
         },
         {
           "name": "Pomelos",
@@ -1050,7 +1148,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/agrumen"
+          "sourcePath": "/produkte/agrumen",
+          "names": {
+            "de": "Pomelos",
+            "en": "Pomelos",
+            "fr": "Pomelos",
+            "it": "Pomelos",
+            "es": "Pomelos"
+          }
         },
         {
           "name": "Sweeties",
@@ -1101,7 +1206,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/agrumen"
+          "sourcePath": "/produkte/agrumen",
+          "names": {
+            "de": "Sweeties",
+            "en": "Sweeties",
+            "fr": "Sweeties",
+            "it": "Sweeties",
+            "es": "Sweeties"
+          }
         },
         {
           "name": "Zitronen",
@@ -1218,7 +1330,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/agrumen"
+          "sourcePath": "/produkte/agrumen",
+          "names": {
+            "de": "Zitronen",
+            "en": "Citrus",
+            "fr": "Citrons",
+            "it": "Limoni",
+            "es": "Limones"
+          }
         }
       ],
       "cover": "/ppo/fileadmin/_processed_/4/9/csm_1_Blutorange_0e36c88ef3.webp"
@@ -1289,7 +1408,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/beeren"
+          "sourcePath": "/produkte/beeren",
+          "names": {
+            "de": "Brombeeren",
+            "en": "Blackberries",
+            "fr": "Mûres",
+            "it": "More",
+            "es": "Moras"
+          }
         },
         {
           "name": "Erdbeeren",
@@ -1336,7 +1462,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/beeren"
+          "sourcePath": "/produkte/beeren",
+          "names": {
+            "de": "Erdbeeren",
+            "en": "Strawberries",
+            "fr": "Fraises",
+            "it": "Fragole",
+            "es": "Fresas"
+          }
         },
         {
           "name": "Himbeeren",
@@ -1384,7 +1517,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/beeren"
+          "sourcePath": "/produkte/beeren",
+          "names": {
+            "de": "Himbeeren",
+            "en": "Raspberries",
+            "fr": "Framboise",
+            "it": "Lamponi",
+            "es": "Frambuesas"
+          }
         },
         {
           "name": "Heidelbeeren",
@@ -1449,7 +1589,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/beeren"
+          "sourcePath": "/produkte/beeren",
+          "names": {
+            "de": "Heidelbeeren",
+            "en": "Blueberries",
+            "fr": "Myrtille",
+            "it": "Mirtilli",
+            "es": "Arándanos"
+          }
         },
         {
           "name": "Johannisbeeren",
@@ -1492,7 +1639,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/beeren"
+          "sourcePath": "/produkte/beeren",
+          "names": {
+            "de": "Johannisbeeren",
+            "en": "Currants",
+            "fr": "Groseilles",
+            "it": "Ribes",
+            "es": "Grosellas"
+          }
         }
       ],
       "cover": "/ppo/fileadmin/_processed_/2/7/csm_1_Brombeeren_bf372ce9c8.webp"
@@ -1563,7 +1717,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/exoten"
+          "sourcePath": "/produkte/exoten",
+          "names": {
+            "de": "Ananas",
+            "en": "Pineapples",
+            "fr": "Ananas",
+            "it": "Ananas",
+            "es": "Piñas"
+          }
         },
         {
           "name": "Avocados",
@@ -1642,7 +1803,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/exoten"
+          "sourcePath": "/produkte/exoten",
+          "names": {
+            "de": "Avocados",
+            "en": "Avocados",
+            "fr": "Avocats",
+            "it": "Avocado",
+            "es": "Aguacates"
+          }
         },
         {
           "name": "Chirimoyas",
@@ -1677,7 +1845,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/exoten"
+          "sourcePath": "/produkte/exoten",
+          "names": {
+            "de": "Chirimoyas",
+            "en": "Chirimoyas",
+            "fr": "Chirimoyas",
+            "it": "Chirimoya",
+            "es": "Chirimoyas"
+          }
         },
         {
           "name": "Feigen",
@@ -1751,7 +1926,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/exoten"
+          "sourcePath": "/produkte/exoten",
+          "names": {
+            "de": "Feigen",
+            "en": "Figs",
+            "fr": "Figues",
+            "it": "Fichi",
+            "es": "Higos"
+          }
         },
         {
           "name": "Granatäpfel",
@@ -1900,7 +2082,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/exoten"
+          "sourcePath": "/produkte/exoten",
+          "names": {
+            "de": "Granatäpfel",
+            "en": "Pomegranates",
+            "fr": "Grenades",
+            "it": "Melagrane",
+            "es": "Granadas"
+          }
         },
         {
           "name": "Kaki Persimon",
@@ -1951,7 +2140,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/exoten"
+          "sourcePath": "/produkte/exoten",
+          "names": {
+            "de": "Kaki Persimon",
+            "en": "Khaki Persimon",
+            "fr": "Kaki Persimon",
+            "it": "Kaki Persimon",
+            "es": "Kaki Persimon"
+          }
         },
         {
           "name": "Litchi",
@@ -2045,7 +2241,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/exoten"
+          "sourcePath": "/produkte/exoten",
+          "names": {
+            "de": "Litchi",
+            "en": "Lychees",
+            "fr": "Litchi",
+            "it": "Litchi",
+            "es": "Lichi"
+          }
         },
         {
           "name": "Mangos",
@@ -2117,7 +2320,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/exoten"
+          "sourcePath": "/produkte/exoten",
+          "names": {
+            "de": "Mangos",
+            "en": "Mangos",
+            "fr": "Mangos",
+            "it": "Mango",
+            "es": "Mangos"
+          }
         },
         {
           "name": "Mispeln",
@@ -2166,7 +2376,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/exoten"
+          "sourcePath": "/produkte/exoten",
+          "names": {
+            "de": "Mispeln",
+            "en": "Medlar",
+            "fr": "Nèfles",
+            "it": "Nespole",
+            "es": "Nísperos"
+          }
         },
         {
           "name": "Sharon",
@@ -2263,7 +2480,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/exoten"
+          "sourcePath": "/produkte/exoten",
+          "names": {
+            "de": "Sharon",
+            "en": "Sharon",
+            "fr": "Sharon",
+            "it": "Sharon",
+            "es": "Sharon"
+          }
         }
       ],
       "cover": "/ppo/fileadmin/_processed_/7/3/csm_1_Ananas_161bee2a3e.webp"
@@ -2357,7 +2581,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/kernobst"
+          "sourcePath": "/produkte/kernobst",
+          "names": {
+            "de": "Äpfel",
+            "en": "Apples",
+            "fr": "Pommes",
+            "it": "Mele",
+            "es": "Manzanas"
+          }
         },
         {
           "name": "Birnen",
@@ -2456,7 +2687,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/kernobst"
+          "sourcePath": "/produkte/kernobst",
+          "names": {
+            "de": "Birnen",
+            "en": "Pears",
+            "fr": "Poires",
+            "it": "Pere",
+            "es": "Peras"
+          }
         },
         {
           "name": "Trauben",
@@ -2732,7 +2970,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/kernobst"
+          "sourcePath": "/produkte/kernobst",
+          "names": {
+            "de": "Trauben",
+            "en": "Grapes",
+            "fr": "Raisins",
+            "it": "Uva",
+            "es": "Uvas"
+          }
         }
       ],
       "cover": "/ppo/fileadmin/_processed_/2/0/csm_1_Aepfel_26a6428524.webp"
@@ -2808,7 +3053,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Spitzkohl",
+            "en": "Pointed cabbage",
+            "fr": "Chou pointu",
+            "it": "Cavoli a punta",
+            "es": "Col picuda"
+          }
         },
         {
           "name": "Stangensellerie",
@@ -2860,7 +3112,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Stangensellerie",
+            "en": "Celery",
+            "fr": "Céleri branche",
+            "it": "Sedano",
+            "es": "Apio"
+          }
         },
         {
           "name": "Rettich",
@@ -2911,7 +3170,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Rettich",
+            "en": "Radish",
+            "fr": "Radis",
+            "it": "Rafano",
+            "es": "Rábano"
+          }
         },
         {
           "name": "Romanesco",
@@ -2960,7 +3226,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Romanesco",
+            "en": "Romanesco",
+            "fr": "Romanesco",
+            "it": "Romanesco",
+            "es": "Romanesco"
+          }
         },
         {
           "name": "Spinat",
@@ -3011,7 +3284,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Spinat",
+            "en": "Spinach",
+            "fr": "Épinards",
+            "it": "Spinacio",
+            "es": "Espinaca"
+          }
         },
         {
           "name": "Lauch",
@@ -3059,7 +3339,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Lauch",
+            "en": "Leek",
+            "fr": "Poireau",
+            "it": "Porro",
+            "es": "Puerro"
+          }
         },
         {
           "name": "Pak Choi",
@@ -3116,7 +3403,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Pak Choi",
+            "en": "Pak Choi",
+            "fr": "Pak Choi",
+            "it": "Pak Choi",
+            "es": "Pak Choi"
+          }
         },
         {
           "name": "Chinakohl",
@@ -3168,7 +3462,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Chinakohl",
+            "en": "Chinese cabbage",
+            "fr": "Chou chinois",
+            "it": "Cavolo cinese",
+            "es": "Col china"
+          }
         },
         {
           "name": "Kohlrabi",
@@ -3218,7 +3519,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Kohlrabi",
+            "en": "Kohlrabi",
+            "fr": "Chou-pomme",
+            "it": "Cavolo rapa",
+            "es": "Colirrábano"
+          }
         },
         {
           "name": "Artischocken",
@@ -3269,7 +3577,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Artischocken",
+            "en": "Artichokes",
+            "fr": "Artichauts",
+            "it": "Carciofi",
+            "es": "Alcachofas"
+          }
         },
         {
           "name": "Blumenkohl",
@@ -3322,7 +3637,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Blumenkohl",
+            "en": "Cauliflower",
+            "fr": "Chou-fleurs",
+            "it": "Cavolfiore",
+            "es": "Coliflores"
+          }
         },
         {
           "name": "Broccoli",
@@ -3377,7 +3699,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Broccoli",
+            "en": "Broccoli",
+            "fr": "Brocoli",
+            "it": "Broccoli",
+            "es": "Bróculi"
+          }
         },
         {
           "name": "Bohnen",
@@ -3456,7 +3785,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Bohnen",
+            "en": "Beans",
+            "fr": "Haricots",
+            "it": "Fagiolini",
+            "es": "Judías"
+          }
         },
         {
           "name": "Tronchuda",
@@ -3513,7 +3849,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Tronchuda",
+            "en": "Tronchuda",
+            "fr": "Tronchuda",
+            "it": "Tronchuda",
+            "es": "Tronchuda"
+          }
         },
         {
           "name": "Gurken",
@@ -3566,7 +3909,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Gurken",
+            "en": "Cucumbers",
+            "fr": "Concombres",
+            "it": "Cetrioli",
+            "es": "Pepinos"
+          }
         },
         {
           "name": "Karotten",
@@ -3610,7 +3960,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Karotten",
+            "en": "Carrots",
+            "fr": "Carottes",
+            "it": "Carote",
+            "es": "Zanahorias"
+          }
         },
         {
           "name": "Kartoffeln",
@@ -3683,7 +4040,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Kartoffeln",
+            "en": "Potatoes",
+            "fr": "Patates",
+            "it": "Patate",
+            "es": "Patatas"
+          }
         },
         {
           "name": "Knoblauch",
@@ -3809,7 +4173,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Knoblauch",
+            "en": "Garlic",
+            "fr": "Aïl",
+            "it": "Aglio",
+            "es": "Ajos"
+          }
         },
         {
           "name": "Peperoni",
@@ -3890,7 +4261,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Peperoni",
+            "en": "Peppers",
+            "fr": "Poivrons",
+            "it": "Peperoni",
+            "es": "Pimientos"
+          }
         },
         {
           "name": "Salate",
@@ -3944,7 +4322,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Salate",
+            "en": "Salads",
+            "fr": "Salades",
+            "it": "Lattughe",
+            "es": "Lechugas"
+          }
         },
         {
           "name": "Spargeln",
@@ -4042,7 +4427,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Spargeln",
+            "en": "Asparagus",
+            "fr": "Asperges",
+            "it": "Asparagi",
+            "es": "Espárragos"
+          }
         },
         {
           "name": "Tomaten",
@@ -4118,7 +4510,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Tomaten",
+            "en": "Tomatoes",
+            "fr": "Tomates",
+            "it": "Pomodori",
+            "es": "Tomates"
+          }
         },
         {
           "name": "Zucchetti",
@@ -4172,7 +4571,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Zucchetti",
+            "en": "Courgettes",
+            "fr": "Courgettes",
+            "it": "Zucchine",
+            "es": "Calabacines"
+          }
         },
         {
           "name": "Zwiebeln",
@@ -4218,7 +4624,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Zwiebeln",
+            "en": "Onions",
+            "fr": "Oignons",
+            "it": "Cipolle",
+            "es": "Cebollas"
+          }
         },
         {
           "name": "Fenchel",
@@ -4268,7 +4681,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Fenchel",
+            "en": "Fennel",
+            "fr": "Fenouil",
+            "it": "Finocchi",
+            "es": "Hinojos"
+          }
         },
         {
           "name": "Ingwer",
@@ -4321,7 +4741,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Ingwer",
+            "en": "Ginger",
+            "fr": "Gingembre",
+            "it": "Zenzero",
+            "es": "Jengibre"
+          }
         },
         {
           "name": "Mais",
@@ -4374,7 +4801,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Mais",
+            "en": "Sweet corn",
+            "fr": "Maïs doux",
+            "it": "Mais",
+            "es": "Maíz dulce"
+          }
         },
         {
           "name": "Süsskartoffeln",
@@ -4451,7 +4885,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Süsskartoffeln",
+            "en": "Sweet potatoes",
+            "fr": "Patates doux",
+            "it": "Patate dolci",
+            "es": "Patatas dulces (Batatas)"
+          }
         },
         {
           "name": "Bimi",
@@ -4515,7 +4956,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/gemuese"
+          "sourcePath": "/produkte/gemuese",
+          "names": {
+            "de": "Bimi",
+            "en": "Bimi",
+            "fr": "Bimi",
+            "it": "Bimi",
+            "es": "Bimi"
+          }
         }
       ],
       "cover": "/ppo/fileadmin/_processed_/f/7/csm_1_Spitzkohl_ce37660779.webp"
@@ -4677,7 +5125,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/melonen"
+          "sourcePath": "/produkte/melonen",
+          "names": {
+            "de": "Galia",
+            "en": "Galia",
+            "fr": "Galia",
+            "it": "Galia",
+            "es": "Galia"
+          }
         },
         {
           "name": "Cantaloupe",
@@ -4786,7 +5241,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/melonen"
+          "sourcePath": "/produkte/melonen",
+          "names": {
+            "de": "Cantaloupe",
+            "en": "Cantaloupe",
+            "fr": "Cantaloupe",
+            "it": "Cantaloupe",
+            "es": "Cantaloup"
+          }
         },
         {
           "name": "Charentais",
@@ -4868,7 +5330,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/melonen"
+          "sourcePath": "/produkte/melonen",
+          "names": {
+            "de": "Charentais",
+            "en": "Charentais",
+            "fr": "Charentais",
+            "it": "Charentais",
+            "es": "Charentais"
+          }
         },
         {
           "name": "Honigmelonen",
@@ -4950,7 +5419,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/melonen"
+          "sourcePath": "/produkte/melonen",
+          "names": {
+            "de": "Honigmelonen",
+            "en": "Honeydew melons",
+            "fr": "Melons jaunes",
+            "it": "Meloni gialli",
+            "es": "Melón amarillo"
+          }
         },
         {
           "name": "Grünmelonen",
@@ -5003,7 +5479,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/melonen"
+          "sourcePath": "/produkte/melonen",
+          "names": {
+            "de": "Grünmelonen",
+            "en": "Green melons",
+            "fr": "Melons verts",
+            "it": "Meloni verdi",
+            "es": "Piel de sapo"
+          }
         },
         {
           "name": "Wassermelonen",
@@ -5085,7 +5568,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/melonen"
+          "sourcePath": "/produkte/melonen",
+          "names": {
+            "de": "Wassermelonen",
+            "en": "Watermelons",
+            "fr": "Pastèques",
+            "it": "Angurie",
+            "es": "Sandías"
+          }
         }
       ],
       "cover": "/ppo/fileadmin/_processed_/e/2/csm_1_Galia_4330f02a2f.webp"
@@ -5251,7 +5741,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/steinfruechte"
+          "sourcePath": "/produkte/steinfruechte",
+          "names": {
+            "de": "Aprikosen",
+            "en": "Apricots",
+            "fr": "Abricots",
+            "it": "Albicocche",
+            "es": "Albaricoque"
+          }
         },
         {
           "name": "Kirschen",
@@ -5371,7 +5868,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/steinfruechte"
+          "sourcePath": "/produkte/steinfruechte",
+          "names": {
+            "de": "Kirschen",
+            "en": "Cherries",
+            "fr": "Cerises",
+            "it": "Ciliegie",
+            "es": "Cerezas"
+          }
         },
         {
           "name": "Nektarinen",
@@ -5523,7 +6027,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/steinfruechte"
+          "sourcePath": "/produkte/steinfruechte",
+          "names": {
+            "de": "Nektarinen",
+            "en": "Nectarines",
+            "fr": "Nectarines",
+            "it": "Nettarine",
+            "es": "Nectarinas"
+          }
         },
         {
           "name": "Pfirsiche",
@@ -5674,7 +6185,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/steinfruechte"
+          "sourcePath": "/produkte/steinfruechte",
+          "names": {
+            "de": "Pfirsiche",
+            "en": "Peaches",
+            "fr": "Pêches",
+            "it": "Pesche",
+            "es": "Melocotones"
+          }
         },
         {
           "name": "Pflaumen",
@@ -5777,7 +6295,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/steinfruechte"
+          "sourcePath": "/produkte/steinfruechte",
+          "names": {
+            "de": "Pflaumen",
+            "en": "Plums",
+            "fr": "Prunes",
+            "it": "Susine",
+            "es": "Ciruelas"
+          }
         },
         {
           "name": "Paraguayos",
@@ -5827,7 +6352,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/steinfruechte"
+          "sourcePath": "/produkte/steinfruechte",
+          "names": {
+            "de": "Paraguayos",
+            "en": "Paraguayos",
+            "fr": "Paraguayos",
+            "it": "Paraguayos",
+            "es": "Paraguayos"
+          }
         }
       ],
       "cover": "/ppo/fileadmin/_processed_/b/2/csm_1_Aprikosen_cc133f4ca6.webp"
@@ -5922,7 +6454,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/spezialprodukte"
+          "sourcePath": "/produkte/spezialprodukte",
+          "names": {
+            "de": "Kumato",
+            "en": "Kumato",
+            "fr": "Kumato",
+            "it": "Kumato",
+            "es": "Kumato"
+          }
         },
         {
           "name": "Marroni",
@@ -5970,7 +6509,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/spezialprodukte"
+          "sourcePath": "/produkte/spezialprodukte",
+          "names": {
+            "de": "Marroni",
+            "en": "Marroni",
+            "fr": "Marroni",
+            "it": "Marroni",
+            "es": "Marroni"
+          }
         }
       ],
       "cover": "/ppo/fileadmin/_processed_/5/5/csm_2_Kumato_f9f777f4c8.webp"
@@ -6083,7 +6629,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/trockenfruechte"
+          "sourcePath": "/produkte/trockenfruechte",
+          "names": {
+            "de": "Datteln",
+            "en": "Dates",
+            "fr": "Dattes",
+            "it": "Datteri",
+            "es": "Dátiles"
+          }
         },
         {
           "name": "Feigen",
@@ -6135,7 +6688,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/trockenfruechte"
+          "sourcePath": "/produkte/trockenfruechte",
+          "names": {
+            "de": "Feigen",
+            "en": "Figs",
+            "fr": "Figues",
+            "it": "Fichi",
+            "es": "Higos"
+          }
         },
         {
           "name": "Kaki Persimon",
@@ -6182,7 +6742,14 @@
               }
             }
           ],
-          "sourcePath": "/produkte/trockenfruechte"
+          "sourcePath": "/produkte/trockenfruechte",
+          "names": {
+            "de": "Kaki Persimon",
+            "en": "Khaki Persimon",
+            "fr": "Kaki Persimon",
+            "it": "Kaki Persimon",
+            "es": "Kaki Persimon"
+          }
         }
       ],
       "cover": "/ppo/fileadmin/_processed_/b/b/csm_1_Datteln_450d90a470.webp"

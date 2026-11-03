@@ -1,4 +1,5 @@
 import rawContent from "@/data/ppo-content.json";
+import { t } from "@/lib/i18n";
 
 export const locales = ["de", "en", "fr", "it", "es"] as const;
 export type Locale = (typeof locales)[number];
@@ -12,6 +13,7 @@ export type ProductOrigin = {
 
 export type PPOProduct = {
   name: string;
+  names?: Partial<Record<Locale, string>>;
   images: { src: string; alt: string }[];
   origins: ProductOrigin[];
   sourcePath: string;
@@ -100,6 +102,10 @@ export function isLocale(value: string): value is Locale {
 
 export function localizedCategoryName(category: PPOCategory, locale: Locale) {
   return category.names[locale] ?? category.name;
+}
+
+export function localizedProductName(product: PPOProduct, locale: Locale) {
+  return product.names?.[locale] ?? product.name;
 }
 
 export function sourcePage(id: string) {
@@ -233,43 +239,48 @@ export function searchIndex(locale: Locale = "de") {
   const entries = [
     ...ppo.categories.map((category) => ({
       title: localizedCategoryName(category, locale),
-      description: `${category.products.length} products`,
+      description: `${category.products.length} ${t(locale, "productsCount")}`,
       href: `/${locale}/products/${category.id}`,
-      kind: "Products",
+      kind: t(locale, "categoryKind"),
     })),
     ...ppo.categories.flatMap((category) =>
       category.products.map((product) => ({
-        title: product.name,
+        title: localizedProductName(product, locale),
         description: localizedCategoryName(category, locale),
         href: `/${locale}/products/${category.id}/${slugify(product.name)}`,
-        kind: "Product",
+        kind: t(locale, "productKind"),
       })),
     ),
-    ...ppo.pages.map((page) => {
+    ...ppo.pages
+      .filter((page) => locale === "de" || page.translations?.[locale])
+      .map((page) => {
       const copy = localizedPageCopy(page, locale);
       return {
         title: copy.title,
         description: copy.blocks[0]?.text ?? "",
         href: `/${locale}/${canonicalPagePath(page.id)}`,
-        kind: "Company",
+        kind: t(locale, "companyKind"),
       };
     }),
     ...ppo.peopleGroups.flatMap((group) =>
       group.people.map((person) => ({
         title: person.name,
-        description: person.roleTranslations?.[locale] ?? person.role,
+        description:
+          person.roleTranslations?.[locale] ?? (locale === "de" ? person.role : ""),
         href: `/${locale}/team/${group.id}#${person.sourceId ?? ""}`,
-        kind: "Team",
+        kind: t(locale, "teamKind"),
       })),
     ),
-    ...ppo.news.map((story) => ({
-      title: story.translations?.[locale]?.title ?? story.title,
-      description:
-        story.translations?.[locale]?.blocks.find((block) => block.type === "p")?.text ??
-        story.excerpt,
-      href: `/${locale}/news/${newsSlug(story)}`,
-      kind: "News",
-    })),
+    ...ppo.news
+      .filter((story) => locale === "de" || story.translations?.[locale])
+      .map((story) => ({
+        title: story.translations?.[locale]?.title ?? story.title,
+        description:
+          story.translations?.[locale]?.blocks.find((block) => block.type === "p")?.text ??
+          story.excerpt,
+        href: `/${locale}/news/${newsSlug(story)}`,
+        kind: t(locale, "newsKind"),
+      })),
   ];
   return entries;
 }

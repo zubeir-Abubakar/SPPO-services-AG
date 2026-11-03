@@ -3,6 +3,7 @@ import Link from "next/link";
 import {
   localizedCategoryName,
   localizedPageCopy,
+  localizedProductName,
   newsSlug,
   ppo,
   type Locale,
@@ -23,10 +24,11 @@ function localizedText(locale: Locale, copy: Record<Locale, string>) {
 
 function StoryCard({ story, locale }: { story: NewsStory; locale: Locale }) {
   const translation = story.translations?.[locale];
-  const title = translation?.title ?? story.title;
+  const title =
+    translation?.title ?? t(locale, "contentUnavailableTitle");
   const excerpt =
     translation?.blocks.find((block) => block.type === "p")?.text ??
-    story.excerpt;
+    t(locale, "availableInGerman");
   const href = `/${locale}/news/${newsSlug(story)}`;
 
   return (
@@ -157,7 +159,7 @@ export function HomePage({ locale }: { locale: Locale }) {
         <div className="hero-image">
           <Image
             src={heroPhoto}
-            alt={topStory?.imageAlt ?? "Fresh produce and PPO producer relationships"}
+            alt={topStory?.translations?.[locale]?.title ?? t(locale, "heroImageAlt")}
             fill
             priority
             sizes="100vw"
@@ -165,28 +167,8 @@ export function HomePage({ locale }: { locale: Locale }) {
         </div>
         <div className="container hero-content">
           <div className="hero-topline"><span className="color-mark" /> PPO Services AG</div>
-          <h1>
-            {locale === "de"
-              ? "Frische. Vertrauen. Weitblick."
-              : locale === "fr"
-                ? "Fraîcheur. Confiance. Ouverture."
-                : locale === "it"
-                  ? "Freschezza. Fiducia. Visione."
-                  : locale === "es"
-                    ? "Frescura. Confianza. Visión."
-                    : "Freshness. Trust. Perspective."}
-          </h1>
-          <p>
-            {locale === "de"
-              ? "Frische Früchte und Gemüse aus verlässlichen Produzentenbeziehungen – mit über 70 Jahren Erfahrung und Schweizer Wurzeln."
-              : locale === "fr"
-                ? "Fruits et légumes frais issus de relations de confiance avec les producteurs, portés par plus de 70 ans d'expérience suisse."
-                : locale === "it"
-                  ? "Frutta e verdura fresca, grazie a rapporti affidabili con i produttori e a oltre 70 anni di esperienza svizzera."
-                  : locale === "es"
-                    ? "Frutas y hortalizas frescas gracias a relaciones fiables con productores y más de 70 años de experiencia suiza."
-                    : "Fresh fruit and vegetables, built on trusted grower relationships and more than 70 years of Swiss expertise."}
-          </p>
+          <h1>{t(locale, "heroTitle")}</h1>
+          <p>{t(locale, "heroCopy")}</p>
           <div className="hero-actions">
             <Link className="button button-primary" href={`/${locale}/products`}>
               {t(locale, "discoverProducts")}
@@ -198,7 +180,8 @@ export function HomePage({ locale }: { locale: Locale }) {
         </div>
         {topStory && (
           <p className="hero-caption">
-            {topStory.translations?.[locale]?.title ?? topStory.title} · {topStory.date}
+            {topStory.translations?.[locale]?.title ??
+              t(locale, "contentUnavailableTitle")} · {topStory.date}
           </p>
         )}
       </section>
@@ -208,15 +191,7 @@ export function HomePage({ locale }: { locale: Locale }) {
           <div className="intro-copy">
             <span className="section-kicker">{t(locale, "aboutPPO")}</span>
             <h2>
-              {locale === "de"
-                ? "Seit Generationen nah am Ursprung."
-                : locale === "fr"
-                  ? "Depuis des générations, proches de l'origine."
-                  : locale === "it"
-                    ? "Da generazioni, vicini all'origine."
-                    : locale === "es"
-                      ? "Generaciones cerca del origen."
-                      : "Generations close to the source."}
+              {t(locale, "introTitle")}
             </h2>
             {introCopy?.blocks.slice(1, 4).map((block, index) => (
               <p key={`${index}-${block.text}`}>{block.text}</p>
@@ -228,12 +203,12 @@ export function HomePage({ locale }: { locale: Locale }) {
           <Link className="photo-frame intro-photo" href={`/${locale}/company/history`}>
             <Image
               src="/ppo/fileadmin/Files/Pictures/14_Geschichte/PPO_Gebaeude_Final.jpg"
-              alt={locale === "de" ? "PPO-Gebäude in Däniken" : "PPO Services AG premises"}
+              alt={t(locale, "historyPhotoAlt")}
               fill
               sizes="(max-width: 48rem) 100vw, 42vw"
             />
             <span className="photo-caption">
-              {locale === "de" ? "Däniken · Schweiz" : "Däniken · Switzerland"}
+              Däniken · {t(locale, "switzerland")}
             </span>
           </Link>
         </div>
@@ -264,55 +239,33 @@ export function HomePage({ locale }: { locale: Locale }) {
               {topStory?.image && (
                 <Image
                   src={topStory.image}
-                  alt={topStory.imageAlt}
+                  alt={topStory.translations?.[locale]?.title ?? t(locale, "heroImageAlt")}
                   fill
                   sizes="(max-width: 48rem) 100vw, 54vw"
                 />
               )}
             </div>
             <div className="split-feature-content">
-              <span className="section-kicker">
-                {locale === "de" ? "Produzentennetzwerk" : "Producer network"}
-              </span>
-              <h2>
-                {locale === "de"
-                  ? "Beziehungen, die über Grenzen wachsen."
-                  : locale === "fr"
-                    ? "Des liens qui franchissent les frontières."
-                    : locale === "it"
-                      ? "Relazioni che superano i confini."
-                      : locale === "es"
-                        ? "Relaciones que cruzan fronteras."
-                        : "Relationships that travel well."}
-              </h2>
-              <p>
-                {locale === "de"
-                  ? "PPO arbeitet mit Produzenten aus rund 25 Ländern zusammen und pflegt ein weltweites Netzwerk."
-                  : locale === "fr"
-                    ? "PPO travaille avec des producteurs d'environ 25 pays et entretient un réseau international."
-                    : locale === "it"
-                      ? "PPO collabora con produttori di circa 25 paesi e mantiene una rete internazionale."
-                      : locale === "es"
-                        ? "PPO trabaja con productores de alrededor de 25 países y mantiene una red internacional."
-                        : "PPO works with producers in around 25 countries and maintains an international network."}
-              </p>
+              <span className="section-kicker">{t(locale, "producerNetwork")}</span>
+              <h2>{t(locale, "producerHeadline")}</h2>
+              <p>{t(locale, "producerCopy")}</p>
               <Link className="text-link" href={`/${locale}/cooperation`}>
-                {locale === "de" ? "Zusammenarbeit" : "Working together"} →
+                {t(locale, "workingTogether")} →
               </Link>
             </div>
           </div>
           <div className="trust-row">
             <div className="trust-item">
               <strong>1946</strong>
-              <span>{locale === "de" ? "Beginn der Firmengeschichte" : "The company's roots"}</span>
+              <span>{t(locale, "historyStarted")}</span>
             </div>
             <div className="trust-item">
               <strong>1976</strong>
-              <span>{locale === "de" ? "Gründung der PPO" : "PPO established"}</span>
+              <span>{t(locale, "ppoFounded")}</span>
             </div>
             <div className="trust-item">
               <strong>70+</strong>
-              <span>{locale === "de" ? "Jahre Erfahrung" : "Years of experience"}</span>
+              <span>{t(locale, "yearsExperience")}</span>
             </div>
           </div>
         </div>
@@ -484,7 +437,7 @@ export function ProductsPage({
         ))}
         {category && (
           <p className="source-attribution">
-            <a href={`https://www.ppo.ch${category.sourcePath}`} target="_blank" rel="noreferrer">
+            <a href={`https://www.ppo.ch${category.localizedPaths[locale] ?? category.sourcePath}`} target="_blank" rel="noreferrer">
               {t(locale, "officialSource")} ↗
             </a>
           </p>
@@ -514,7 +467,7 @@ export function ProductPage({
       </nav>
       <ProductDetail category={category} product={product} locale={locale} />
       <p className="source-attribution">
-        <a href={`https://www.ppo.ch${category.sourcePath}`} target="_blank" rel="noreferrer">
+        <a href={`https://www.ppo.ch${category.localizedPaths[locale] ?? category.sourcePath}`} target="_blank" rel="noreferrer">
           {t(locale, "officialSource")} ↗
         </a>
       </p>
@@ -561,7 +514,8 @@ export function NewsDetailPage({
   story: NewsStory;
 }) {
   const translation = story.translations?.[locale];
-  const title = translation?.title ?? story.title;
+  const title =
+    translation?.title ?? t(locale, "contentUnavailableTitle");
   const blocks = translation?.blocks ?? story.blocks;
   const sourceArticle = story.localizedPaths?.[locale] ?? story.href;
 
@@ -594,7 +548,6 @@ export function NewsDetailPage({
           </div>
         ) : (
           <div className="content-prose">
-            <p>{story.excerpt}</p>
             <p>{t(locale, "availableInGerman")}</p>
           </div>
         )}
@@ -664,15 +617,17 @@ export function OfficialContentPage({
   page: SourcePage;
   locale: Locale;
 }) {
-  const copy = localizedPageCopy(page, locale);
   const hasTranslation = Boolean(page.translations?.[locale]) || locale === "de";
+  const copy = hasTranslation
+    ? localizedPageCopy(page, locale)
+    : { title: t(locale, "contentUnavailableTitle"), blocks: [] };
   const sourcePath = page.localizedPaths[locale] ?? page.sourcePath;
   return (
     <>
       <PageIntro
         locale={locale}
         eyebrow={page.id === "privacy" || page.id === "legal" ? t(locale, "legal") : t(locale, "company")}
-        title={copy.blocks.find((block) => block.type === "h1")?.text ?? page.name}
+        title={copy.blocks.find((block) => block.type === "h1")?.text ?? copy.title}
         description={page.id === "company" ? t(locale, "companyIntro") : undefined}
       />
       <section className="container content-section official-content">
@@ -693,10 +648,10 @@ export function OfficialContentPage({
             ))}
           </div>
         )}
-        <PageBlocks page={page} locale={locale} />
-        {page.documents.length > 0 && (
+        {hasTranslation && <PageBlocks page={page} locale={locale} />}
+        {hasTranslation && page.documents.length > 0 && (
           <div className="official-documents">
-            <h2>{locale === "de" ? "Dokumente" : "Documents"}</h2>
+            <h2>{t(locale, "documents")}</h2>
             <ul className="document-list">
               {page.documents.map((document) => (
                 <li key={document.source}>
@@ -709,6 +664,7 @@ export function OfficialContentPage({
             </ul>
           </div>
         )}
+
         <p className="source-attribution">
           <a href={`https://www.ppo.ch${sourcePath}`} target="_blank" rel="noreferrer">{t(locale, "officialSource")} ↗</a>
         </p>
@@ -730,7 +686,7 @@ export function TeamPage({
       <PageIntro
         locale={locale}
         eyebrow={t(locale, "team")}
-        title={group?.names?.[locale] ?? (locale === "de" ? "Menschen, die PPO verbinden." : "The people behind PPO.")}
+        title={group?.names?.[locale] ?? t(locale, "teamHeadline")}
         description={localizedText(locale, {
           de: "Geschäftsleitung, Handel, Administration, IT, Qualität, Medien und internationale Vertretungen.",
           en: "Management, trade, administration, IT, quality, media and international representatives.",
@@ -744,7 +700,7 @@ export function TeamPage({
           {groups.map((item) => (
             <section className="team-group" key={item.id}>
               <div className="rail-heading">
-                <h2>{item.names?.[locale] ?? item.name}</h2>
+                <h2>{item.names?.[locale] ?? t(locale, "teamHeadline")}</h2>
                 <span className="catalog-count">{item.people.length}</span>
               </div>
               <div className="team-grid">
@@ -783,7 +739,7 @@ export function TeamPage({
           ))}
         </div>
         <p className="source-attribution">
-          <a href={`https://www.ppo.ch${group?.sourcePath ?? "/firma/team/geschaeftsleitung"}`} target="_blank" rel="noreferrer">{t(locale, "officialSource")} ↗</a>
+          <a href={`https://www.ppo.ch${group?.localizedPaths?.[locale] ?? group?.sourcePath ?? "/firma/team/geschaeftsleitung"}`} target="_blank" rel="noreferrer">{t(locale, "officialSource")} ↗</a>
         </p>
       </section>
     </>
@@ -819,7 +775,7 @@ export function TeamBreadcrumb({
       <span aria-hidden="true">/</span>
       <Link href={`/${locale}/products/${category.id}`}>{localizedCategoryName(category, locale)}</Link>
       <span aria-hidden="true">/</span>
-      <span>{product.name}</span>
+      <span>{localizedProductName(product, locale)}</span>
     </nav>
   );
 }

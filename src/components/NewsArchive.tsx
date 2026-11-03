@@ -49,10 +49,12 @@ function paginationLabel(locale: Locale, direction: "previous" | "next") {
 const pageSize = 12;
 
 function StoryCard({ story, locale }: { story: NewsStory; locale: Locale }) {
-  const title = story.translations?.[locale]?.title ?? story.title;
+  const title =
+    story.translations?.[locale]?.title ??
+    t(locale, "contentUnavailableTitle");
   const excerpt =
     story.translations?.[locale]?.blocks.find((block) => block.type === "p")?.text ??
-    story.excerpt;
+    t(locale, "availableInGerman");
   const href = `/${locale}/news/${newsSlug(story)}`;
 
   return (
@@ -96,10 +98,10 @@ export function NewsArchive({
     const term = query.trim().toLocaleLowerCase(locale);
     return stories.filter((story) => {
       const translation = story.translations?.[locale];
-      const title = translation?.title ?? story.title;
+      const title = translation?.title ?? t(locale, "contentUnavailableTitle");
       const excerpt =
         translation?.blocks.find((block) => block.type === "p")?.text ??
-        story.excerpt;
+        t(locale, "availableInGerman");
       const matchesQuery =
         !term || `${title} ${excerpt}`.toLocaleLowerCase(locale).includes(term);
       return matchesQuery && (filter === "all" || topic(story) === filter);

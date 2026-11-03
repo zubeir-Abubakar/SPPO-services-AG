@@ -5,12 +5,24 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import {
   localizedCategoryName,
+  localizedProductName,
   slugify,
   type Locale,
   type PPOCategory,
   type PPOProduct,
 } from "@/lib/content";
 import { months, t } from "@/lib/i18n";
+
+function productManagers(product: PPOProduct) {
+  const managers = new Map<string, PPOProduct["origins"][number]["managers"][number]>();
+  for (const origin of product.origins) {
+    for (const manager of origin.managers) {
+      const key = manager.href || manager.name;
+      if (!managers.has(key)) managers.set(key, manager);
+    }
+  }
+  return [...managers.values()];
+}
 
 function ProductTile({
   product,
@@ -23,30 +35,31 @@ function ProductTile({
 }) {
   const image = product.images[0];
   const origins = product.origins;
-  const firstOrigin = origins[0];
+  const managers = productManagers(product);
   const monthList = months(locale);
+  const productName = localizedProductName(product, locale);
 
   return (
     <article className="product-card">
       <Link
         className="product-photo"
         href={`/${locale}/products/${category.id}/${slugify(product.name)}`}
-        aria-label={`${product.name} — ${t(locale, "details")}`}
+        aria-label={`${productName} — ${t(locale, "details")}`}
       >
         {image ? (
           <Image
             src={image.src}
-            alt={image.alt}
+            alt={productName}
             fill
             sizes="(max-width: 48rem) 50vw, (max-width: 62rem) 48vw, 32vw"
           />
         ) : (
-          <span className="image-fallback">{product.name}</span>
+          <span className="image-fallback">{productName}</span>
         )}
       </Link>
       <div className="product-card-content">
         <div className="product-title-row">
-          <h2>{product.name}</h2>
+          <h2>{productName}</h2>
           <span className="product-category-label">
             {localizedCategoryName(category, locale)}
           </span>
@@ -62,9 +75,9 @@ function ProductTile({
             <div
               className="month-strip"
               aria-label={`${t(locale, "availableMonths")}: ${
-                firstOrigin?.months
-                  .map((month) => monthList[month - 1])
-                  .join(", ") ?? ""
+                monthList.filter((_, index) =>
+                  origins.some((origin) => origin.months.includes(index + 1)),
+                ).join(", ")
               }`}
             >
               {monthList.map((month, index) => {
@@ -87,15 +100,14 @@ function ProductTile({
         {origins.length === 0 && (
           <p className="product-origin">{t(locale, "organicNote")}</p>
         )}
-        <div className="product-meta">
-          {origins.flatMap((origin) =>
-            origin.managers.map((manager) => (
-              <span key={`${origin.country}-${manager.name}`}>
-                {t(locale, "productManager")}: {manager.name}
-              </span>
-            )),
-          )}
-        </div>
+        {managers.length > 0 && (
+          <div className="product-meta">
+            <span>
+              {t(locale, "productManager")}:{" "}
+              {managers.map((manager) => manager.name).join(", ")}
+            </span>
+          </div>
+        )}
       </div>
     </article>
   );
@@ -133,7 +145,7 @@ export function ProductCatalog({
         .filter((product) => {
           const matchesTerm =
             !term ||
-            `${product.name} ${localizedCategoryName(category, locale)}`
+            `${product.name} ${Object.values(product.names ?? {}).join(" ")} ${localizedCategoryName(category, locale)}`
               .toLocaleLowerCase(locale)
               .includes(term);
           const matchesOrigin =
@@ -255,6 +267,8 @@ export function ProductDetail({
   const images = product.images;
   const active = images[activeImage];
   const monthNames = months(locale);
+  const managers = productManagers(product);
+  const productName = localizedProductName(product, locale);
 
   return (
     <section className="product-detail">
@@ -263,22 +277,22 @@ export function ProductDetail({
           {active ? (
             <Image
               src={active.src}
-              alt={active.alt}
+              alt={productName}
               fill
               priority
               sizes="(max-width: 48rem) 100vw, 55vw"
             />
           ) : (
-            <span>{product.name}</span>
+            <span>{productName}</span>
           )}
         </div>
         {images.length > 1 && (
-          <div className="product-gallery" aria-label={`${product.name} photos`}>
+          <div className="product-gallery" aria-label={`${productName} — ${t(locale, "photos")}`}>
             {images.map((image, index) => (
               <button
                 type="button"
                 key={image.src}
-                aria-label={`Photo ${index + 1}: ${image.alt}`}
+                aria-label={`${t(locale, "photo")} ${index + 1}: ${productName}`}
                 aria-pressed={index === activeImage}
                 onClick={() => setActiveImage(index)}
               >
@@ -290,7 +304,7 @@ export function ProductDetail({
       </div>
       <div className="detail-copy">
         <span className="section-kicker">{localizedCategoryName(category, locale)}</span>
-        <h1>{product.name}</h1>
+        <h1>{productName}</h1>
         <p>{t(locale, "availableMonths")}</p>
         {product.origins.map((item) => (
           <div className="availability-row" key={item.country}>
@@ -306,25 +320,27 @@ export function ProductDetail({
                 </span>
               ))}
             </div>
-            {item.managers.length > 0 && (
-              <p>
-                {t(locale, "productManager")}:{" "}
-                {item.managers.map((manager, index) => (
-                  <span key={`${manager.name}-${manager.href}`}>
-                    {index > 0 ? " / " : ""}
-                    <Link href={`/${locale}/team/trade${manager.href?.includes("#") ? manager.href.slice(manager.href.indexOf("#")) : ""}`}>
-                      {manager.name}
-                    </Link>
-                  </span>
-                ))}
-              </p>
-            )}
           </div>
         ))}
+        {managers.length > 0 && (
+          <div className="availability-row">
+            <strong>{t(locale, "productManager")}</strong>
+            <p>
+              {managers.map((manager, index) => (
+                <span key={`${manager.name}-${manager.href}`}>
+                  {index > 0 ? " / " : ""}
+                  <Link href={`/${locale}/team/trade${manager.href?.includes("#") ? manager.href.slice(manager.href.indexOf("#")) : ""}`}>
+                    {manager.name}
+                  </Link>
+                </span>
+              ))}
+            </p>
+          </div>
+        )}
         <div className="detail-actions">
           <Link
             className="button button-primary"
-            href={`/${locale}/contact?enquiry=specifications&product=${encodeURIComponent(product.name)}`}
+            href={`/${locale}/contact?enquiry=specifications&product=${encodeURIComponent(productName)}`}
           >
             {t(locale, "requestSpecifications")}
           </Link>

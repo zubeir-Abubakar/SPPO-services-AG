@@ -39,6 +39,8 @@ const formSchema = z.object({
   website: z.union([z.literal(""), z.string().trim().url().max(240)]),
   enquiryType: z.enum(enquiryValues),
   productCategories: z.array(z.string().trim().max(100)).max(12),
+  productRange: z.string().trim().max(1200),
+  estimatedVolume: z.string().trim().max(200),
   productNames: z.string().trim().max(1200),
   origin: z.string().trim().max(300),
   quantity: z.string().trim().max(200),
@@ -109,6 +111,9 @@ async function hasExpectedSignature(file: File, extension: string) {
 }
 
 export async function POST(request: Request) {
+  const localeHeader = request.headers.get("x-ppo-locale");
+  const responseLocale: Locale =
+    localeHeader && isLocale(localeHeader) ? localeHeader : "en";
   const origin = request.headers.get("origin");
   let validOrigin = true;
   if (origin) {
@@ -120,7 +125,7 @@ export async function POST(request: Request) {
   }
   if (!validOrigin) {
     return NextResponse.json(
-      { message: "Invalid request origin." },
+      { message: t(responseLocale, "invalidOrigin") },
       { status: 403, headers: { "Cache-Control": "no-store" } },
     );
   }
@@ -128,7 +133,7 @@ export async function POST(request: Request) {
   const contentLength = Number(request.headers.get("content-length") || 0);
   if (contentLength > maxRequestSize) {
     return NextResponse.json(
-      { message: "The submitted form is too large." },
+      { message: t(responseLocale, "requestTooLarge") },
       { status: 413, headers: { "Cache-Control": "no-store" } },
     );
   }
@@ -139,19 +144,19 @@ export async function POST(request: Request) {
   } catch (error) {
     if (error instanceof RequestTooLargeError) {
       return NextResponse.json(
-        { message: "The submitted form is too large." },
+        { message: t(responseLocale, "requestTooLarge") },
         { status: 413, headers: { "Cache-Control": "no-store" } },
       );
     }
     return NextResponse.json(
-      { message: "The submitted form data could not be read." },
+      { message: t(responseLocale, "formUnreadable") },
       { status: 400, headers: { "Cache-Control": "no-store" } },
     );
   }
 
   if (String(formData.get("companyFax") ?? "").trim()) {
     return NextResponse.json(
-      { message: "Invalid form submission." },
+      { message: t(responseLocale, "invalidSubmission") },
       { status: 400, headers: { "Cache-Control": "no-store" } },
     );
   }
@@ -170,6 +175,8 @@ export async function POST(request: Request) {
     website: formData.get("website") ?? "",
     enquiryType: formData.get("enquiryType"),
     productCategories: formData.getAll("productCategories"),
+    productRange: formData.get("productRange") ?? "",
+    estimatedVolume: formData.get("estimatedVolume") ?? "",
     productNames: formData.get("productNames") ?? "",
     origin: formData.get("origin") ?? "",
     quantity: formData.get("quantity") ?? "",
@@ -249,6 +256,8 @@ export async function POST(request: Request) {
   outboundData.set("website", data.website);
   outboundData.set("enquiryType", data.enquiryType);
   outboundData.set("productCategories", data.productCategories.join(", "));
+  outboundData.set("productRange", data.productRange);
+  outboundData.set("estimatedVolume", data.estimatedVolume);
   outboundData.set("productNames", data.productNames);
   outboundData.set("origin", data.origin);
   outboundData.set("quantity", data.quantity);

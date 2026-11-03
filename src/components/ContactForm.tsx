@@ -22,7 +22,14 @@ export function ContactForm({
   const [isSending, setIsSending] = useState(false);
   const [status, setStatus] = useState<{ type: "error" | "success"; message: string } | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const [includeProduct, setIncludeProduct] = useState(Boolean(initialProduct || initialEnquiry));
+  const [enquiryType, setEnquiryType] = useState(initialEnquiry);
+  const showProductInformation = [
+    "Product enquiry",
+    "Customer / Buyer enquiry",
+    "Product specifications request",
+  ].includes(enquiryType);
+  const showSupplierInformation = enquiryType === "Supplier / Producer enquiry";
+  const showAttachments = showProductInformation || showSupplierInformation;
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -35,6 +42,7 @@ export function ContactForm({
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
+        headers: { "x-ppo-locale": locale },
         body: new FormData(event.currentTarget),
       });
       const result = (await response.json()) as FormResponse;
@@ -50,7 +58,7 @@ export function ContactForm({
       if (enquiryField instanceof HTMLSelectElement) enquiryField.value = "";
       const productNames = form?.elements.namedItem("productNames");
       if (productNames instanceof HTMLTextAreaElement) productNames.value = "";
-      setIncludeProduct(false);
+      setEnquiryType("");
     } catch {
       setStatus({ type: "error", message: t(locale, "formFailed") });
     } finally {
@@ -70,9 +78,20 @@ export function ContactForm({
 
   const mapUrl = `https://www.google.com/maps/search/?api=1&query=${ppo.map.lat}%2C${ppo.map.lng}`;
   const embedUrl = `https://maps.google.com/maps?q=${ppo.map.lat}%2C${ppo.map.lng}&z=15&output=embed`;
-  const address = locale === "de"
-    ? ["PPO Services AG", "Herrenmattstrasse 2", "Postfach", "CH-4658 Däniken", "Schweiz"]
-    : ["PPO Services AG", "Herrenmattstrasse 2", "Postfach", "CH-4658 Däniken", "Switzerland"];
+  const countryName = {
+    de: "Schweiz",
+    en: "Switzerland",
+    fr: "Suisse",
+    it: "Svizzera",
+    es: "Suiza",
+  }[locale];
+  const address = [
+    "PPO Services AG",
+    "Herrenmattstrasse 2",
+    "Postfach",
+    "CH-4658 Däniken",
+    countryName,
+  ];
 
   return (
     <div className="contact-layout">
@@ -145,12 +164,7 @@ export function ContactForm({
                 defaultValue={initialEnquiry}
                 aria-invalid={Boolean(fieldErrors.enquiryType)}
                 aria-describedby="enquiryType-error"
-                onChange={(event) =>
-                  setIncludeProduct(
-                    event.target.value === "Product enquiry" ||
-                      event.target.value === "Product specifications request",
-                  )
-                }
+                onChange={(event) => setEnquiryType(event.target.value)}
               >
                 <option value="">{t(locale, "selectOption")}</option>
                 {enquiryOptions(locale).map((option) => (
@@ -161,20 +175,18 @@ export function ContactForm({
             </div>
           </div>
 
-          {includeProduct && (
+          {showProductInformation && (
             <div className="form-section">
               <div className="form-section-heading"><h2>{t(locale, "productInformation")}</h2></div>
               <div className="form-grid">
                 <div className="field">
                   <label htmlFor="productCategories">{t(locale, "productCategory")}</label>
-                  <select id="productCategories" name="productCategories" multiple size={4} aria-describedby="category-hint category-error">
+                  <select id="productCategories" name="productCategories" defaultValue="" aria-invalid={Boolean(fieldErrors.productCategories)} aria-describedby="productCategories-error">
+                    <option value="">{t(locale, "selectOption")}</option>
                     {categories.map((category) => (
                       <option value={category.name} key={category.id}>{category.name}</option>
                     ))}
                   </select>
-                  <span className="field-hint" id="category-hint">
-                    {locale === "de" ? "Mehrere Kategorien mit Strg/Cmd auswählen." : "Select multiple categories with Ctrl/Cmd."}
-                  </span>
                   {fieldError("productCategories")}
                 </div>
                 <div className="field">
@@ -210,6 +222,38 @@ export function ContactForm({
               </div>
             </div>
           )}
+          {showSupplierInformation && (
+            <div className="form-section">
+              <div className="form-section-heading"><h2>{t(locale, "productInformation")}</h2></div>
+              <div className="form-grid">
+                <div className="field">
+                  <label htmlFor="productCategories">{t(locale, "productCategory")}</label>
+                  <select id="productCategories" name="productCategories" defaultValue="" aria-invalid={Boolean(fieldErrors.productCategories)} aria-describedby="productCategories-error">
+                    <option value="">{t(locale, "selectOption")}</option>
+                    {categories.map((category) => (
+                      <option value={category.name} key={category.id}>{category.name}</option>
+                    ))}
+                  </select>
+                  {fieldError("productCategories")}
+                </div>
+                <div className="field">
+                  <label htmlFor="origin">{t(locale, "origin")}</label>
+                  <input id="origin" name="origin" aria-invalid={Boolean(fieldErrors.origin)} aria-describedby="origin-error" />
+                  {fieldError("origin")}
+                </div>
+                <div className="field field-wide">
+                  <label htmlFor="productRange">{t(locale, "productRange")}</label>
+                  <textarea id="productRange" name="productRange" rows={3} maxLength={1200} aria-invalid={Boolean(fieldErrors.productRange)} aria-describedby="productRange-error" />
+                  {fieldError("productRange")}
+                </div>
+                <div className="field field-wide">
+                  <label htmlFor="estimatedVolume">{t(locale, "estimatedVolume")}</label>
+                  <input id="estimatedVolume" name="estimatedVolume" maxLength={200} aria-invalid={Boolean(fieldErrors.estimatedVolume)} aria-describedby="estimatedVolume-error" />
+                  {fieldError("estimatedVolume")}
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="form-section">
             <div className="form-section-heading"><h2>{t(locale, "message")}</h2></div>
@@ -218,12 +262,14 @@ export function ContactForm({
               <textarea id="message" name="message" minLength={10} maxLength={6000} required aria-required="true" placeholder={t(locale, "messagePlaceholder")} aria-invalid={Boolean(fieldErrors.message)} aria-describedby="message-error" />
               {fieldError("message")}
             </div>
-            <div className="field">
-              <label htmlFor="attachments">{t(locale, "attachments")}</label>
-              <input id="attachments" name="attachments" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.webp,.docx,application/pdf,image/jpeg,image/png,image/webp,application/vnd.openxmlformats-officedocument.wordprocessingml.document" aria-invalid={Boolean(fieldErrors.attachments)} aria-describedby="attachments-hint attachments-error" />
-              <span className="field-hint" id="attachments-hint">{t(locale, "attachmentHelp")}</span>
-              {fieldError("attachments")}
-            </div>
+            {showAttachments && (
+              <div className="field">
+                <label htmlFor="attachments">{showSupplierInformation ? t(locale, "supportingDocuments") : t(locale, "attachments")}</label>
+                <input id="attachments" name="attachments" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.webp,.docx,application/pdf,image/jpeg,image/png,image/webp,application/vnd.openxmlformats-officedocument.wordprocessingml.document" aria-invalid={Boolean(fieldErrors.attachments)} aria-describedby="attachments-hint attachments-error" />
+                <span className="field-hint" id="attachments-hint">{t(locale, "attachmentHelp")}</span>
+                {fieldError("attachments")}
+              </div>
+            )}
           </div>
 
           <div className="form-section">

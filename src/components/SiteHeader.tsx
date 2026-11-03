@@ -36,6 +36,10 @@ export function SiteHeader({
   const [query, setQuery] = useState("");
   const productPopoverRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
+
   const results = useMemo(() => {
     const term = query.trim().toLocaleLowerCase(locale);
     if (!term) return searchEntries.slice(0, 7);

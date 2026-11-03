@@ -17,6 +17,7 @@ import {
   canonicalPagePath,
   categoryFromSourcePath,
   isLocale,
+  localizedProductName,
   newsSlugAliases,
   pageFromSourcePath,
   pageRouteAliases,
@@ -92,7 +93,9 @@ function safeTitle(locale: Locale, segments: string[]) {
   if (segments[0] === "news") return t(locale, "news");
   if (segments[0] === "team") return t(locale, "team");
   const page = sourcePage(segments.at(-1) ?? "");
-  return page?.name ?? "PPO Services AG";
+  if (!page) return "PPO Services AG";
+  if (locale === "de") return page.name;
+  return page.translations?.[locale]?.title ?? t(locale, "contentUnavailableTitle");
 }
 
 export async function generateMetadata({
@@ -104,11 +107,24 @@ export async function generateMetadata({
   const story = segments[0] === "news" && segments[1]
     ? ppo.news.find((item) => newsSlugAliases(item).has(segments[1]))
     : undefined;
-  const title = story?.translations?.[locale]?.title ?? story?.title ?? safeTitle(locale, segments);
+  const productCategory =
+    segments[0] === "products"
+      ? ppo.categories.find((category) => category.id === segments[1])
+      : undefined;
+  const product =
+    productCategory && segments[2]
+      ? productBySlug(productCategory, segments[2])
+      : undefined;
+  const title = product
+    ? localizedProductName(product, locale)
+    : story
+      ? story.translations?.[locale]?.title ??
+        t(locale, "contentUnavailableTitle")
+      : safeTitle(locale, segments);
   return {
     title,
-    description:
-      "PPO Services AG — fresh fruit and vegetables, backed by trusted producer relationships and Swiss expertise.",
+    description: t(locale, "siteDescription"),
+    openGraph: { locale: `${locale}_CH` },
     alternates: {
       canonical: `/${locale}${segments.length ? `/${segments.join("/")}` : ""}`,
     },

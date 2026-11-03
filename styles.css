@@ -124,7 +124,7 @@ p { margin: 0 0 16px; color: var(--muted); }
 .lang-option {
   width: 100%;
   border: 0;
-  background: transparent;
+  background: white;
   text-align: left;
   padding: 10px 12px;
   border-radius: 12px;
