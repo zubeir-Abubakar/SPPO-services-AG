@@ -37,6 +37,8 @@ export function SiteHeader({
   const [query, setQuery] = useState("");
   const productPopoverRef = useRef<HTMLDivElement>(null);
   const menuToggleRef = useRef<HTMLButtonElement>(null);
+  const isCurrent = (href: string) =>
+    pathname === href || pathname?.startsWith(`${href}/`);
 
   useEffect(() => {
     document.documentElement.lang = locale;
@@ -81,6 +83,9 @@ export function SiteHeader({
     if (!mobileOpen) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    document.querySelector<HTMLElement>(
+      "#primary-navigation a, #primary-navigation button",
+    )?.focus();
     return () => {
       document.body.style.overflow = previousOverflow;
     };
@@ -130,7 +135,11 @@ export function SiteHeader({
       <a className="skip-link" href="#main-content">
         {t(locale, "skipToContent")}
       </a>
-      <header className="site-header" data-scrolled={scrolled}>
+      <header
+        className="site-header"
+        data-scrolled={scrolled}
+        data-mobile-open={mobileOpen}
+      >
         <div className="container">
           <div className="nav-glass">
             <Link
@@ -154,6 +163,13 @@ export function SiteHeader({
               aria-label={t(locale, "siteNavigation")}
               data-open={mobileOpen}
             >
+              <button
+                className="mobile-drawer-close"
+                type="button"
+                onClick={closeMenus}
+              >
+                {t(locale, "closeMenu")}
+              </button>
               <div className="nav-popover product-popover" ref={productPopoverRef}>
                 <button
                   className="nav-link nav-products-toggle"
@@ -161,6 +177,7 @@ export function SiteHeader({
                   aria-haspopup="true"
                   aria-expanded={productsOpen}
                   aria-controls="product-mega-menu"
+                  aria-current={isCurrent(`/${locale}/products`) ? "page" : undefined}
                   onClick={() => setProductsOpen((open) => !open)}
                 >
                   {t(locale, "products")}
@@ -207,26 +224,27 @@ export function SiteHeader({
                   </div>
                 </div>
               </div>
-              <Link className="nav-link" href={`/${locale}/company`} onClick={closeMenus}>
+              <Link className="nav-link" href={`/${locale}/company`} aria-current={isCurrent(`/${locale}/company`) ? "page" : undefined} onClick={closeMenus}>
                 {t(locale, "company")}
               </Link>
-              <Link className="nav-link" href={`/${locale}/quality`} onClick={closeMenus}>
+              <Link className="nav-link" href={`/${locale}/quality`} aria-current={isCurrent(`/${locale}/quality`) ? "page" : undefined} onClick={closeMenus}>
                 {t(locale, "quality")}
               </Link>
               <Link
                 className="nav-link"
                 href={`/${locale}/sustainability`}
+                aria-current={isCurrent(`/${locale}/sustainability`) ? "page" : undefined}
                 onClick={closeMenus}
               >
                 {t(locale, "sustainability")}
               </Link>
-              <Link className="nav-link" href={`/${locale}/news`} onClick={closeMenus}>
+              <Link className="nav-link" href={`/${locale}/news`} aria-current={isCurrent(`/${locale}/news`) ? "page" : undefined} onClick={closeMenus}>
                 {t(locale, "news")}
               </Link>
-              <Link className="nav-link" href={`/${locale}/careers`} onClick={closeMenus}>
+              <Link className="nav-link" href={`/${locale}/careers`} aria-current={isCurrent(`/${locale}/careers`) ? "page" : undefined} onClick={closeMenus}>
                 {t(locale, "careers")}
               </Link>
-              <Link className="nav-link" href={`/${locale}/contact`} onClick={closeMenus}>
+              <Link className="nav-link" href={`/${locale}/contact`} aria-current={isCurrent(`/${locale}/contact`) ? "page" : undefined} onClick={closeMenus}>
                 {t(locale, "contact")}
               </Link>
               <Link
@@ -317,6 +335,15 @@ export function SiteHeader({
           </div>
         </div>
       </header>
+
+      {mobileOpen && (
+        <button
+          className="mobile-nav-scrim"
+          type="button"
+          aria-label={t(locale, "closeMenu")}
+          onClick={closeMenus}
+        />
+      )}
 
       {searchOpen && (
         <div

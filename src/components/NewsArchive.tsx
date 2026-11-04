@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { newsSlug, type Locale, type NewsStory } from "@/lib/content";
 import { t } from "@/lib/i18n";
+import { MaskedText } from "@/components/Motion";
 
 function topic(story: NewsStory) {
   const text = `${story.title} ${story.excerpt}`.toLocaleLowerCase();
@@ -75,8 +76,10 @@ function StoryCard({ story, locale }: { story: NewsStory; locale: Locale }) {
           <span>{story.date || "PPO News"}</span>
           <span>{localizedTopic(story, locale)}</span>
         </div>
-        <h3><Link href={href}>{title}</Link></h3>
-        <p>{translation ? excerpt : t(locale, "newsOriginalLanguage")}</p>
+        <Link className="story-title" href={href}>
+          <MaskedText as="h3">{title}</MaskedText>
+        </Link>
+        <MaskedText>{translation ? excerpt : t(locale, "newsOriginalLanguage")}</MaskedText>
         <Link className="text-link" href={href}>{t(locale, "explore")} →</Link>
       </div>
     </article>

@@ -1,41 +1,33 @@
 # PPO Services AG — design system
 
-Shared design rules for the Next.js site. Content and photography remain grounded in PPO's official pages; this file records the visual system rather than replacing the source of truth.
+Shared visual system for the existing five-language Next.js website. Preserve
+its routes, original logo, catalogue records, company content, photographs,
+language paths, and contact integrations.
 
-## Direction
-- Genre: modern-minimal with produce-editorial photography.
-- Macrostructure: Ecosystem Index for discovery pages; long-form section pages share the same shell and tokens.
-- Primary action: qualified customer, supplier, and partnership enquiries.
-- Tone: fresh, exact, international, Swiss-rooted.
+## Brand and tone
 
-## Palette
-- Warm glasshouse paper: `oklch(97% 0.012 104)`.
-- Fresh leaf green: PPO logo green `#94c11a`.
-- Citrus yellow: PPO logo yellow `#fbb900`.
-- PPO lime: PPO logo lime `#c7d300`.
-- PPO orange: PPO logo orange `#ec6500`.
-- PPO vermilion: PPO logo red `#e53009`.
-- PPO berry: PPO logo berry `#a51d49`.
-- Supporting violet: use sparingly as a secondary UI accent, not as a claimed PPO logo colour.
-- Glass surfaces use translucent warm white, fine borders, and restrained blur; body content stays on readable opaque surfaces.
+- Tone: fresh, exact, international, and Swiss-rooted.
+- Warm ivory `#faf9f7`, white `#ffffff`, charcoal `#202020`, and muted grey
+  `#737373` form the page palette.
+- PPO gradient: `linear-gradient(59deg, #fa7d0f 0%, #df392a 50%, #d8184e 100%)`.
+- Burgundy `#641c35` supports active states. Green is reserved for original
+  brand marks and genuine photography; do not recolour the logo.
 
-## Typography
-- Display: DM Serif Display, upright, for short editorial headlines.
-- Body and interface: Ubuntu, preserving the original site's typographic character.
-- No more than these two font families.
+## Typography and layout
 
-## Spacing and shape
-- 4-point spacing scale, named CSS custom properties.
-- Wide editorial gutters, asymmetric photo-led layouts, and consistent image aspect ratios.
-- Glass effect reserved for navigation, search, language menus, and the contact form; not used behind long text.
+- Display: DM Serif Display, upright, for selected headings.
+- Body and interface: Ubuntu, with a 16px baseline and comfortable line-height.
+- Shared content width: 1360px maximum; compact, aligned navigation.
+- Balanced editorial columns, consistent image ratios, and content-led spacing.
+- Product photographs preserve their original aspect and remain fully visible.
 
-## Interaction
-- Keyboard-operable navigation, search and forms; visible focus rings.
-- Forms provide field-level errors and explicit loading/failure states.
-- Contact submission confirms only when SMTP delivery is configured and succeeds.
-- Respect reduced motion and provide touch-friendly mobile targets.
+## Components and interaction
 
-## Content and assets
-- PPO's existing logo, images, product facts, people, legal links, language paths and contact facts are authoritative.
-- Product imagery must remain paired with its source product; no generic or substituted photography.
-- Unverified metrics and certificates are not introduced.
+- Primary actions and highlighted links use PPO gradient.
+- Sticky navigation includes a designed category menu and an accessible
+  viewport-fixed mobile drawer that prevents background scrolling while open.
+- Use PPO's original photography and existing translated catalogue/company
+  data; do not introduce unverified facts or substitute imagery.
+- Contact form submissions continue through the existing `/api/contact` route.
+- Motion is limited to brief entrance and hover transitions; honor reduced
+  motion preferences.

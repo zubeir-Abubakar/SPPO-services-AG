@@ -1,22 +1,22 @@
 :root {
-  --color-paper: oklch(97% 0.012 104);
-  --color-paper-raised: oklch(99% 0.008 104);
-  --color-paper-tint: oklch(94% 0.022 116);
-  --color-ink: oklch(22% 0.025 145);
-  --color-ink-soft: oklch(40% 0.025 140);
-  --color-muted: oklch(51% 0.025 130);
-  --color-line: oklch(83% 0.022 123);
-  --color-leaf: #94c11a;
-  --color-leaf-dark: #4c6413;
-  --color-lime: #c7d300;
-  --color-citrus: #fbb900;
-  --color-orange: #ec6500;
-  --color-red: #e53009;
-  --color-berry: #a51d49;
-  --color-violet: #704b8f;
-  --color-focus: #4c6413;
+  --color-paper: #faf9f7;
+  --color-paper-raised: #ffffff;
+  --color-paper-tint: #f2efeb;
+  --color-ink: #202020;
+  --color-ink-soft: #484848;
+  --color-muted: #737373;
+  --color-line: #e5e0dc;
+  --color-leaf: #fa7d0f;
+  --color-leaf-dark: #641c35;
+  --color-lime: #df392a;
+  --color-citrus: #fa7d0f;
+  --color-orange: #fa7d0f;
+  --color-red: #df392a;
+  --color-berry: #d8184e;
+  --color-focus: #df392a;
   --color-error: #c5220c;
-  --color-success: #427813;
+  --color-success: #641c35;
+  --color-brand-gradient: linear-gradient(59deg, #fa7d0f 0%, #df392a 50%, #d8184e 100%);
 
   --font-display: "DM Serif Display", Georgia, serif;
   --font-body: "Ubuntu", ui-sans-serif, sans-serif;
@@ -49,8 +49,8 @@
   --radius-card: 1.5rem;
   --radius-feature: 2rem;
   --radius-pill: 999px;
-  --glass-fill: oklch(99% 0.008 104 / 0.78);
-  --glass-line: oklch(100% 0 0 / 0.74);
-  --shadow-soft: 0 24px 70px oklch(29% 0.05 146 / 0.12);
-  --shadow-float: 0 14px 42px oklch(29% 0.05 146 / 0.1);
+  --glass-fill: rgb(255 255 255 / 0.88);
+  --glass-line: rgb(32 32 32 / 0.09);
+  --shadow-soft: 0 24px 70px rgb(32 32 32 / 0.08);
+  --shadow-float: 0 14px 42px rgb(32 32 32 / 0.08);
 }

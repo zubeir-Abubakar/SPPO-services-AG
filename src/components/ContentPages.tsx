@@ -17,6 +17,8 @@ import { t } from "@/lib/i18n";
 import { NewsArchive } from "@/components/NewsArchive";
 import { ProductCatalog, ProductDetail } from "@/components/ProductCatalog";
 import { ContactForm } from "@/components/ContactForm";
+import { HomeHero } from "@/components/HomeHero";
+import { MaskedText, MilestoneStats } from "@/components/Motion";
 
 function localizedText(locale: Locale, copy: Record<Locale, string>) {
   return copy[locale];
@@ -47,8 +49,10 @@ function StoryCard({ story, locale }: { story: NewsStory; locale: Locale }) {
       </Link>
       <div className="story-body">
         <div className="story-meta"><span>{story.date || "PPO News"}</span></div>
-        <h3><Link href={href}>{title}</Link></h3>
-        <p>{excerpt}</p>
+        <Link className="story-title" href={href}>
+          <MaskedText as="h3">{title}</MaskedText>
+        </Link>
+        <MaskedText>{excerpt}</MaskedText>
         <Link className="text-link" href={href}>{t(locale, "explore")} →</Link>
       </div>
     </article>
@@ -71,9 +75,9 @@ function PageIntro({
       <div className="page-hero-inner">
         <div>
           {eyebrow && <span className="section-kicker">{eyebrow}</span>}
-          <h1>{title}</h1>
+          <MaskedText as="h1">{title}</MaskedText>
         </div>
-        {description && <p>{description}</p>}
+        {description && <MaskedText>{description}</MaskedText>}
       </div>
     </header>
   );
@@ -94,11 +98,11 @@ function SectionHeading({
     <div className="section-heading">
       <div>
         {kicker && <span className="section-kicker">{kicker}</span>}
-        <h2>{title}</h2>
+        <MaskedText as="h2">{title}</MaskedText>
       </div>
       {(description || link) && (
         <div className="section-heading-aside">
-          {description && <p>{description}</p>}
+          {description && <MaskedText>{description}</MaskedText>}
           {link && <Link className="text-link" href={link.href}>{link.label} →</Link>}
         </div>
       )}
@@ -134,7 +138,7 @@ function CategoryTiles({
             )}
           </div>
           <div className="category-body">
-            <h3>{localizedCategoryName(category, locale)}</h3>
+            <MaskedText as="h3">{localizedCategoryName(category, locale)}</MaskedText>
             <span className="category-arrow" aria-hidden="true">↗</span>
           </div>
         </Link>
@@ -148,53 +152,24 @@ export function HomePage({ locale }: { locale: Locale }) {
   const topStory = ppo.news[0];
   const intro = ppo.pages.find((page) => page.id === "company");
   const introCopy = intro ? localizedPageCopy(intro, locale) : null;
-  const heroPhoto =
-    topStory?.image ??
-    categories.find((category) => category.id === "salads")?.cover ??
-    ppo.logo;
-
   return (
     <>
-      <section className="hero">
-        <div className="hero-image">
-          <Image
-            src={heroPhoto}
-            alt={topStory?.translations?.[locale]?.title ?? t(locale, "heroImageAlt")}
-            fill
-            priority
-            sizes="100vw"
-          />
-        </div>
-        <div className="container hero-content">
-          <div className="hero-topline"><span className="color-mark" /> PPO Services AG</div>
-          <h1>{t(locale, "heroTitle")}</h1>
-          <p>{t(locale, "heroCopy")}</p>
-          <div className="hero-actions">
-            <Link className="button button-primary" href={`/${locale}/products`}>
-              {t(locale, "discoverProducts")}
-            </Link>
-            <Link className="button button-secondary" href={`/${locale}/contact`}>
-              {t(locale, "getInTouch")}
-            </Link>
-          </div>
-        </div>
-        {topStory && (
-          <p className="hero-caption">
-            {topStory.translations?.[locale]?.title ??
-              t(locale, "contentUnavailableTitle")} · {topStory.date}
-          </p>
-        )}
-      </section>
+      <HomeHero
+        title={t(locale, "heroTitle")}
+        description={t(locale, "heroCopy")}
+        primaryAction={t(locale, "discoverProducts")}
+        primaryHref={`/${locale}/products`}
+        secondaryAction={t(locale, "getInTouch")}
+        secondaryHref={`/${locale}/contact`}
+      />
 
       <section className="content-section">
         <div className="container intro-grid">
           <div className="intro-copy">
             <span className="section-kicker">{t(locale, "aboutPPO")}</span>
-            <h2>
-              {t(locale, "introTitle")}
-            </h2>
+            <MaskedText as="h2">{t(locale, "introTitle")}</MaskedText>
             {introCopy?.blocks.slice(1, 4).map((block, index) => (
-              <p key={`${index}-${block.text}`}>{block.text}</p>
+              <MaskedText key={`${index}-${block.text}`}>{block.text}</MaskedText>
             ))}
             <Link className="text-link" href={`/${locale}/company`}>
               {t(locale, "explore")} {t(locale, "company")} →
@@ -202,7 +177,7 @@ export function HomePage({ locale }: { locale: Locale }) {
           </div>
           <Link className="photo-frame intro-photo" href={`/${locale}/company/history`}>
             <Image
-              src="/ppo/fileadmin/Files/Pictures/14_Geschichte/PPO_Gebaeude_Final.jpg"
+              src="/ppo/fileadmin/Files/Pictures/14_Geschichte/1_Geschichte.jpg"
               alt={t(locale, "historyPhotoAlt")}
               fill
               sizes="(max-width: 48rem) 100vw, 42vw"
@@ -247,27 +222,27 @@ export function HomePage({ locale }: { locale: Locale }) {
             </div>
             <div className="split-feature-content">
               <span className="section-kicker">{t(locale, "producerNetwork")}</span>
-              <h2>{t(locale, "producerHeadline")}</h2>
-              <p>{t(locale, "producerCopy")}</p>
+              <MaskedText as="h2">{t(locale, "producerHeadline")}</MaskedText>
+              <MaskedText>{t(locale, "producerCopy")}</MaskedText>
               <Link className="text-link" href={`/${locale}/cooperation`}>
                 {t(locale, "workingTogether")} →
               </Link>
             </div>
           </div>
-          <div className="trust-row">
-            <div className="trust-item">
-              <strong>1946</strong>
-              <span>{t(locale, "historyStarted")}</span>
-            </div>
-            <div className="trust-item">
-              <strong>1976</strong>
-              <span>{t(locale, "ppoFounded")}</span>
-            </div>
-            <div className="trust-item">
-              <strong>70+</strong>
-              <span>{t(locale, "yearsExperience")}</span>
-            </div>
-          </div>
+          <MilestoneStats
+            label={localizedText(locale, {
+              de: "PPO-Meilensteine",
+              en: "PPO milestones",
+              fr: "Dates clés de PPO",
+              it: "Traguardi di PPO",
+              es: "Hitos de PPO",
+            })}
+            milestones={[
+              { value: 1946, label: t(locale, "historyStarted") },
+              { value: 1976, label: t(locale, "ppoFounded") },
+              { value: 70, suffix: "+", label: t(locale, "yearsExperience") },
+            ]}
+          />
         </div>
       </section>
 
@@ -329,8 +304,8 @@ export function HomePage({ locale }: { locale: Locale }) {
                   </div>
                 )}
                 <div>
-                  <h3>{item.title}</h3>
-                  <p>{item.text}</p>
+                  <MaskedText as="h3">{item.title}</MaskedText>
+                  <MaskedText>{item.text}</MaskedText>
                   <span className="text-link">{t(locale, "explore")} →</span>
                 </div>
               </Link>
@@ -358,8 +333,8 @@ export function HomePage({ locale }: { locale: Locale }) {
         <div className="container">
           <div className="closing-panel">
             <span className="section-kicker">{t(locale, "contact")}</span>
-            <h2>{t(locale, "partnershipTitle")}</h2>
-            <p>{t(locale, "partnershipCopy")}</p>
+            <MaskedText as="h2">{t(locale, "partnershipTitle")}</MaskedText>
+            <MaskedText>{t(locale, "partnershipCopy")}</MaskedText>
             <Link className="button button-primary" href={`/${locale}/contact`}>
               {t(locale, "getInTouch")}
             </Link>
@@ -408,41 +383,54 @@ export function ProductsPage({
       {!category && (
         <section className="container content-section category-index">
           <div className="rail-heading">
-            <h2>{t(locale, "allCategories")}</h2>
+            <MaskedText as="h2">{t(locale, "allCategories")}</MaskedText>
             <span className="catalog-count">{categories.length} {t(locale, "categories")}</span>
           </div>
           <CategoryTiles categories={categories} locale={locale} />
         </section>
       )}
-      <section className="container content-section products-listing">
-        <div className="rail-heading">
-          <h2>{category ? t(locale, "details") : t(locale, "products")}</h2>
-          <span className="catalog-count">{count} {t(locale, "productsCount")}</span>
-        </div>
-        <ProductCatalog
-          categories={ppo.categories}
-          locale={locale}
-          selectedCategory={category?.id}
-        />
-        {category?.sourcePageImages?.map((image) => (
-          <figure className="source-image" key={image.src}>
-            <Image src={image.src} alt={image.alt || localizedCategoryName(category, locale)} width={800} height={600} />
-          </figure>
-        ))}
-        {category?.documents?.map((document) => (
-          <a className="document-link category-flyer" href={document.href} key={document.source} target="_blank" rel="noreferrer">
-            <span>{document.label || "Bio Flyer"}</span>
-            <span aria-hidden="true">↗</span>
+      {count > 0 && (
+        <section className="container content-section products-listing">
+          <div className="rail-heading">
+            <MaskedText as="h2">{category ? t(locale, "details") : t(locale, "products")}</MaskedText>
+            <span className="catalog-count">{count} {t(locale, "productsCount")}</span>
+          </div>
+          <ProductCatalog
+            categories={ppo.categories}
+            locale={locale}
+            selectedCategory={category?.id}
+          />
+        </section>
+      )}
+      {category?.sourcePageImages?.map((image) => (
+        <figure className="container source-image" key={image.src}>
+          <Image
+            src={image.src}
+            alt={image.alt || localizedCategoryName(category, locale)}
+            width={800}
+            height={600}
+          />
+        </figure>
+      ))}
+      {category?.documents?.map((document) => (
+        <a
+          className="container document-link category-flyer"
+          href={document.href}
+          key={document.source}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <span>{document.label || "Bio Flyer"}</span>
+          <span aria-hidden="true">↗</span>
+        </a>
+      ))}
+      {category && (
+        <p className="container source-attribution">
+          <a href={`https://www.ppo.ch${category.localizedPaths[locale] ?? category.sourcePath}`} target="_blank" rel="noreferrer">
+            {t(locale, "officialSource")} ↗
           </a>
-        ))}
-        {category && (
-          <p className="source-attribution">
-            <a href={`https://www.ppo.ch${category.localizedPaths[locale] ?? category.sourcePath}`} target="_blank" rel="noreferrer">
-              {t(locale, "officialSource")} ↗
-            </a>
-          </p>
-        )}
-      </section>
+        </p>
+      )}
     </>
   );
 }
@@ -527,7 +515,7 @@ export function NewsDetailPage({
         <div className="page-hero-inner">
           <div>
             <span className="section-kicker">{t(locale, "news")}</span>
-            <h1>{title}</h1>
+            <MaskedText as="h1">{title}</MaskedText>
           </div>
           <p>{story.date}</p>
         </div>
@@ -542,15 +530,16 @@ export function NewsDetailPage({
           <div className="content-prose">
             {blocks.map((block, index) => {
               if (block.type === "h1") return null;
-              if (block.type === "h2") return <h2 key={index}>{block.text}</h2>;
-              if (block.type === "h3" || block.type === "h4") return <h3 key={index}>{block.text}</h3>;
-              if (block.type === "li") return <p className="article-list-item" key={index}>• {block.text}</p>;
-              return <p key={index}>{block.text}</p>;
+              if (block.type === "h2") return <MaskedText as="h2" key={index}>{block.text}</MaskedText>;
+              if (block.type === "h3") return <MaskedText as="h3" key={index}>{block.text}</MaskedText>;
+              if (block.type === "h4") return <MaskedText as="h4" key={index}>{block.text}</MaskedText>;
+              if (block.type === "li") return <MaskedText className="article-list-item" key={index}>{`• ${block.text}`}</MaskedText>;
+              return <MaskedText key={index}>{block.text}</MaskedText>;
             })}
           </div>
         ) : !hasTranslation ? (
           <div className="content-prose">
-            <p>{t(locale, "availableInGerman")}</p>
+            <MaskedText>{t(locale, "availableInGerman")}</MaskedText>
           </div>
         ) : null}
         <p className="source-attribution">
@@ -579,10 +568,6 @@ export function ContactPage({
         description={t(locale, "contactIntro")}
       />
       <section className="container content-section contact-section">
-        <div className="contact-heading">
-          <span className="section-kicker">PPO Services AG</span>
-          <p>{t(locale, "contactIntro")}</p>
-        </div>
         <ContactForm
           locale={locale}
           initialProduct={initialProduct}
@@ -603,10 +588,11 @@ function PageBlocks({ page, locale }: { page: SourcePage; locale: Locale }) {
     <div className="content-prose">
       {content.blocks.map((block, index) => {
         if (block.type === "h1") return null;
-        if (block.type === "h2") return <h2 key={`${index}-${block.text}`}>{block.text}</h2>;
-        if (block.type === "h3" || block.type === "h4") return <h3 key={`${index}-${block.text}`}>{block.text}</h3>;
-        if (block.type === "li") return <p className="article-list-item" key={`${index}-${block.text}`}>• {block.text}</p>;
-        return <p key={`${index}-${block.text}`}>{block.text}</p>;
+        if (block.type === "h2") return <MaskedText as="h2" key={`${index}-${block.text}`}>{block.text}</MaskedText>;
+        if (block.type === "h3") return <MaskedText as="h3" key={`${index}-${block.text}`}>{block.text}</MaskedText>;
+        if (block.type === "h4") return <MaskedText as="h4" key={`${index}-${block.text}`}>{block.text}</MaskedText>;
+        if (block.type === "li") return <MaskedText className="article-list-item" key={`${index}-${block.text}`}>{`• ${block.text}`}</MaskedText>;
+        return <MaskedText key={`${index}-${block.text}`}>{block.text}</MaskedText>;
       })}
     </div>
   );
@@ -627,6 +613,8 @@ function QualityPage({ page, locale }: { page: SourcePage; locale: Locale }) {
 
   const safetySection = sections[0];
   const temperatureSection = sections[3];
+  const qualityIntro = copy.blocks.find((block) => block.type === "p")?.text;
+  const temperatureCopy = temperatureSection?.blocks.find((block) => block.type === "p")?.text;
   const climateDocument = page.documents[0];
   const certificates = page.images.slice(1);
   const certificateDetails = [
@@ -657,8 +645,8 @@ function QualityPage({ page, locale }: { page: SourcePage; locale: Locale }) {
       <header className="quality-hero container">
         <div className="quality-hero-copy">
           <span className="section-kicker">{t(locale, "quality")}</span>
-          <h1>{t(locale, "qualityPageTitle")}</h1>
-          <p>{copy.blocks.find((block) => block.type === "p")?.text}</p>
+          <MaskedText as="h1">{t(locale, "qualityPageTitle")}</MaskedText>
+          {qualityIntro && <MaskedText>{qualityIntro}</MaskedText>}
         </div>
         {page.images[0] && (
           <figure className="quality-hero-image">
@@ -678,11 +666,11 @@ function QualityPage({ page, locale }: { page: SourcePage; locale: Locale }) {
           <section className="quality-safety">
             <div className="quality-section-heading">
               <span className="section-kicker">{t(locale, "quality")}</span>
-              <h2>{t(locale, "foodSafety")}</h2>
+              <MaskedText as="h2">{t(locale, "foodSafety")}</MaskedText>
             </div>
             <div className="quality-safety-copy content-prose">
               {safetySection.blocks.map((block, index) => (
-                <p key={`${index}-${block.text}`}>{block.text}</p>
+                <MaskedText key={`${index}-${block.text}`}>{block.text}</MaskedText>
               ))}
             </div>
           </section>
@@ -691,11 +679,11 @@ function QualityPage({ page, locale }: { page: SourcePage; locale: Locale }) {
         <section className="quality-regulations">
           <div className="quality-section-heading">
             <span className="section-kicker">{t(locale, "qualityContext")}</span>
-            <h2>{sections[1]?.title}</h2>
+            <MaskedText as="h2">{sections[1]?.title ?? ""}</MaskedText>
           </div>
           <div className="regulation-grid">
             <article className="regulation-card">
-              <h3>{sections[1]?.title}</h3>
+              <MaskedText as="h3">{sections[1]?.title ?? ""}</MaskedText>
               <ul>
                 {swissRegulations.map((regulation) => (
                   <li key={regulation.href}>
@@ -707,7 +695,7 @@ function QualityPage({ page, locale }: { page: SourcePage; locale: Locale }) {
               </ul>
             </article>
             <article className="regulation-card">
-              <h3>{sections[2]?.title}</h3>
+              <MaskedText as="h3">{sections[2]?.title ?? ""}</MaskedText>
               <a
                 href="https://food.ec.europa.eu/plants/pesticides/eu-pesticides-database_en"
                 target="_blank"
@@ -723,9 +711,9 @@ function QualityPage({ page, locale }: { page: SourcePage; locale: Locale }) {
           <section className="quality-temperature">
             <div className="quality-section-heading">
               <span className="section-kicker">{t(locale, "quality")}</span>
-              <h2>{temperatureSection.title}</h2>
+              <MaskedText as="h2">{temperatureSection.title}</MaskedText>
             </div>
-            <p>{temperatureSection.blocks.find((block) => block.type === "p")?.text}</p>
+            {temperatureCopy && <MaskedText>{temperatureCopy}</MaskedText>}
             {climateDocument && (
               <a
                 className="climate-document-card"
@@ -747,8 +735,8 @@ function QualityPage({ page, locale }: { page: SourcePage; locale: Locale }) {
         <section className="quality-certificates">
           <div className="quality-section-heading">
             <span className="section-kicker">{t(locale, "quality")}</span>
-            <h2>{sections[4]?.title}</h2>
-            <p>{t(locale, "certificateUnknownOwner")}</p>
+            <MaskedText as="h2">{sections[4]?.title ?? ""}</MaskedText>
+            <MaskedText>{t(locale, "certificateUnknownOwner")}</MaskedText>
           </div>
           <div className="certificate-grid">
             {certificates.map((image) => {
@@ -779,8 +767,8 @@ function QualityPage({ page, locale }: { page: SourcePage; locale: Locale }) {
                     />
                   </a>
                   <div className="certificate-copy">
-                    <h3>{title}</h3>
-                    <p>{ownership}</p>
+                    <MaskedText as="h3">{title}</MaskedText>
+                    <MaskedText>{ownership}</MaskedText>
                     <a href={image.src} target="_blank" rel="noreferrer">
                       {t(locale, "certificateOpen")} <span aria-hidden="true">↗</span>
                     </a>
@@ -794,8 +782,8 @@ function QualityPage({ page, locale }: { page: SourcePage; locale: Locale }) {
         <section className="quality-cta">
           <div>
             <span className="section-kicker">{t(locale, "quality")}</span>
-            <h2>{t(locale, "qualityCtaTitle")}</h2>
-            <p>{t(locale, "qualityCtaCopy")}</p>
+            <MaskedText as="h2">{t(locale, "qualityCtaTitle")}</MaskedText>
+            <MaskedText>{t(locale, "qualityCtaCopy")}</MaskedText>
           </div>
           <Link className="button button-primary" href={`/${locale}/contact`}>
             {t(locale, "contact")} <span aria-hidden="true">↗</span>
@@ -844,17 +832,17 @@ export function OfficialContentPage({
             : undefined
         }
       />
-      <section className="container content-section official-content">
+      <section className={`container content-section official-content official-content-${page.id}`}>
         {!hasTranslation && (
           <div className="source-notice">
-            <p>{t(locale, "availableInGerman")}</p>
+            <MaskedText>{t(locale, "availableInGerman")}</MaskedText>
             <a className="text-link" href={`https://www.ppo.ch${sourcePath}`} target="_blank" rel="noreferrer">
               {t(locale, "officialSource")} ↗
             </a>
           </div>
         )}
         {editorialImage ? (
-          <div className="editorial-page">
+          <div className={`editorial-page editorial-page-${page.id}`}>
             <figure className="editorial-page-image">
               <Image
                 src={editorialImage.src}
@@ -891,6 +879,29 @@ export function OfficialContentPage({
           </div>
         )}
 
+        {page.id === "company" && hasTranslation && (
+          <section className="company-team-entry">
+            <div>
+              <span className="section-kicker">{t(locale, "team")}</span>
+              <MaskedText as="h2">
+                {locale === "en" ? "The Team," : t(locale, "teamHeadline")}
+              </MaskedText>
+              <MaskedText>
+                {localizedText(locale, {
+                  de: "Lernen Sie die Geschäftsleitung und die Menschen hinter PPO kennen.",
+                  en: "Meet PPO's management and the people behind the company.",
+                  fr: "Découvrez la direction et les personnes qui font PPO.",
+                  it: "Scoprite la direzione e le persone che danno vita a PPO.",
+                  es: "Conozca a la dirección y a las personas que forman PPO.",
+                })}
+              </MaskedText>
+            </div>
+            <Link className="button button-primary" href={`/${locale}/team/management`}>
+              {t(locale, "team")} <span aria-hidden="true">↗</span>
+            </Link>
+          </section>
+        )}
+
         <p className="source-attribution">
           <a href={`https://www.ppo.ch${sourcePath}`} target="_blank" rel="noreferrer">{t(locale, "officialSource")} ↗</a>
         </p>
@@ -907,12 +918,16 @@ export function TeamPage({
   group?: PeopleGroup;
 }) {
   const groups = group ? [group] : ppo.peopleGroups;
+  const teamTitle = (item: PeopleGroup) =>
+    item.id === "management" && locale === "en"
+      ? "The Team,"
+      : item.names?.[locale] ?? t(locale, "teamHeadline");
   return (
     <>
       <PageIntro
         locale={locale}
         eyebrow={t(locale, "team")}
-        title={group?.names?.[locale] ?? t(locale, "teamHeadline")}
+        title={group ? teamTitle(group) : t(locale, "teamHeadline")}
         description={localizedText(locale, {
           de: "Geschäftsleitung, Handel, Administration, IT, Qualität, Medien und internationale Vertretungen.",
           en: "Management, trade, administration, IT, quality, media and international representatives.",
@@ -924,11 +939,13 @@ export function TeamPage({
       <section className="container content-section">
         <div className="team-groups">
           {groups.map((item) => (
-            <section className="team-group" key={item.id}>
-              <div className="rail-heading">
-                <h2>{item.names?.[locale] ?? t(locale, "teamHeadline")}</h2>
-                <span className="catalog-count">{item.people.length}</span>
-              </div>
+            <section className="team-group" aria-label={teamTitle(item)} key={item.id}>
+              {!group && (
+                <div className="rail-heading">
+                  <MaskedText as="h2">{teamTitle(item)}</MaskedText>
+                  <span className="catalog-count">{item.people.length}</span>
+                </div>
+              )}
               <div className="team-grid">
                 {item.people.map((person) => (
                   <article className="person-card" id={person.sourceId ?? undefined} key={`${item.id}-${person.name}`}>
@@ -946,11 +963,11 @@ export function TeamPage({
                       </div>
                     )}
                     <div className="person-content">
-                      <h3>{person.name}</h3>
+                      <MaskedText as="h3">{person.name}</MaskedText>
                       {(person.roleTranslations?.[locale] ?? person.role) && (
-                        <p className="person-title">
+                        <MaskedText className="person-title">
                           {person.roleTranslations?.[locale] ?? person.role}
-                        </p>
+                        </MaskedText>
                       )}
                       <div className="person-lines">
                         {person.phone && <a href={`tel:${person.phone.replace(/[^\d+]/g, "")}`}>T {person.phone}</a>}

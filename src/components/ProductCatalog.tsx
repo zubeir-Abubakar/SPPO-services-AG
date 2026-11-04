@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import {
   localizedCategoryName,
@@ -12,6 +13,7 @@ import {
   type PPOProduct,
 } from "@/lib/content";
 import { months, t } from "@/lib/i18n";
+import { MaskedText } from "@/components/Motion";
 
 function productManagers(product: PPOProduct) {
   const managers = new Map<string, PPOProduct["origins"][number]["managers"][number]>();
@@ -59,7 +61,7 @@ function ProductTile({
       </Link>
       <div className="product-card-content">
         <div className="product-title-row">
-          <h2>{productName}</h2>
+          <MaskedText as="h2">{productName}</MaskedText>
           <span className="product-category-label">
             {localizedCategoryName(category, locale)}
           </span>
@@ -122,6 +124,7 @@ export function ProductCatalog({
   locale: Locale;
   selectedCategory?: string;
 }) {
+  const router = useRouter();
   const [query, setQuery] = useState("");
   const [origin, setOrigin] = useState("");
   const [month, setMonth] = useState("");
@@ -225,7 +228,7 @@ export function ProductCatalog({
               value={selectedCategory ?? ""}
               onChange={(event) => {
                 const nextCategory = event.target.value;
-                window.location.assign(
+                router.push(
                   nextCategory
                     ? `/${locale}/products/${nextCategory}`
                     : `/${locale}/products`,
@@ -257,7 +260,21 @@ export function ProductCatalog({
           ))}
         </div>
       ) : (
-        <div className="empty-state">{t(locale, "noProductsMatch")}</div>
+        <div className="empty-state" role="status">
+          <p>{t(locale, "noProductsMatch")}</p>
+          <button
+            className="text-link"
+            type="button"
+            onClick={() => {
+              setQuery("");
+              setOrigin("");
+              setMonth("");
+              if (selectedCategory) router.push(`/${locale}/products`);
+            }}
+          >
+            {t(locale, "clearFilters")}
+          </button>
+        </div>
       )}
     </>
   );
@@ -313,8 +330,8 @@ export function ProductDetail({
       </div>
       <div className="detail-copy">
         <span className="section-kicker">{localizedCategoryName(category, locale)}</span>
-        <h1>{productName}</h1>
-        <p>{t(locale, "availableMonths")}</p>
+        <MaskedText as="h1">{productName}</MaskedText>
+        <MaskedText>{t(locale, "availableMonths")}</MaskedText>
         {product.origins.map((item) => (
           <div className="availability-row" key={item.country}>
             <strong>{item.countryNames?.[locale] ?? item.country}</strong>
