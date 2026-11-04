@@ -531,16 +531,6 @@ p { color: var(--color-ink-soft); max-width: 68ch; }
 
 .text-reveal { position: relative; }
 .text-reveal-source { display: block; }
-.text-reveal-measure {
-  position: absolute;
-  inset: 0;
-  display: block;
-  width: 100%;
-  visibility: hidden;
-  pointer-events: none;
-  white-space: normal;
-}
-.text-reveal[data-armed="true"] .text-reveal-source { display: none; }
 .text-reveal-lines { display: block; }
 .text-reveal-line {
   display: block;

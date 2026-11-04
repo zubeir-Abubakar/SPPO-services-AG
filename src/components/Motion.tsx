@@ -20,39 +20,51 @@ export function MaskedText({
   className?: string;
 }) {
   const rootRef = useRef<HTMLElement>(null);
-  const measureRef = useRef<HTMLSpanElement>(null);
+  const sourceRef = useRef<HTMLSpanElement>(null);
   const [lines, setLines] = useState<string[]>();
   const [visible, setVisible] = useState(false);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
-    const measure = measureRef.current;
-    const textNode = measure?.firstChild;
-    if (!root || !measure || !textNode || textNode.nodeType !== Node.TEXT_NODE) {
+    const source = sourceRef.current;
+    const textNode = source?.firstChild;
+    if (
+      lines ||
+      !root ||
+      !source ||
+      !textNode ||
+      textNode.nodeType !== Node.TEXT_NODE
+    ) {
       return;
     }
 
-    const splitLines = () => {
-      const groups: { top: number; words: string[] }[] = [];
-      const words = children.matchAll(/\S+/g);
-      for (const word of words) {
-        const range = document.createRange();
-        range.setStart(textNode, word.index);
-        range.setEnd(textNode, word.index + word[0].length);
-        const top = range.getBoundingClientRect().top;
-        const line = groups.find((group) => Math.abs(group.top - top) < 2);
-        if (line) line.words.push(word[0]);
-        else groups.push({ top, words: [word[0]] });
-      }
-      if (groups.length) setLines(groups.map((group) => group.words.join(" ")));
-    };
+    const groups: { top: number; words: string[] }[] = [];
+    for (const word of children.matchAll(/\S+/g)) {
+      const range = document.createRange();
+      range.setStart(textNode, word.index);
+      range.setEnd(textNode, word.index + word[0].length);
+      const top = range.getBoundingClientRect().top;
+      const line = groups.find((group) => Math.abs(group.top - top) < 2);
+      if (line) line.words.push(word[0]);
+      else groups.push({ top, words: [word[0]] });
+    }
+    if (groups.length) setLines(groups.map((group) => group.words.join(" ")));
+  }, [children, lines]);
 
-    splitLines();
-    if (!("ResizeObserver" in window)) return;
-    const resizeObserver = new ResizeObserver(splitLines);
+  useEffect(() => {
+    if (!lines?.length || !("ResizeObserver" in window)) return;
+    const root = rootRef.current;
+    if (!root) return;
+    let width = root.getBoundingClientRect().width;
+    const resizeObserver = new ResizeObserver(() => {
+      const nextWidth = root.getBoundingClientRect().width;
+      if (Math.abs(nextWidth - width) < 1) return;
+      width = nextWidth;
+      setLines(undefined);
+    });
     resizeObserver.observe(root);
     return () => resizeObserver.disconnect();
-  }, [children]);
+  }, [lines]);
 
   useEffect(() => {
     if (!lines?.length) return;
@@ -112,20 +124,13 @@ export function MaskedText({
       className={`text-reveal${className ? ` ${className}` : ""}`}
       data-armed={lines?.length ? "true" : undefined}
       data-visible={visible ? "true" : undefined}
+      aria-label={children}
     >
-      <span className="visually-hidden">{children}</span>
       {!lines && (
-        <span className="text-reveal-source" aria-hidden="true">
+        <span ref={sourceRef} className="text-reveal-source" aria-hidden="true">
           {children}
         </span>
       )}
-      <span
-        ref={measureRef}
-        className="text-reveal-measure"
-        aria-hidden="true"
-      >
-        {children}
-      </span>
       {lines && (
         <span className="text-reveal-lines" aria-hidden="true">
           {lines.map((line, index) => (

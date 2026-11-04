@@ -142,24 +142,18 @@ export function ProductCatalog({
     [categories],
   );
   const filtered = useMemo(() => {
-    const term = query.trim().toLocaleLowerCase(locale);
+    const normalizeSearchText = (value: string) =>
+      value.normalize("NFC").toLocaleLowerCase(locale);
+    const term = normalizeSearchText(query.trim());
     return categories.flatMap((category) =>
       category.products
         .filter((product) => {
-          const searchableText = [
-            product.name,
-            ...Object.values(product.names ?? {}),
-            localizedCategoryName(category, locale),
-            ...product.origins.flatMap((item) => [
-              item.country,
-              ...Object.values(item.countryNames ?? {}),
-            ]),
-            ...productManagers(product).map((manager) => manager.name),
-          ]
-            .join(" ")
-            .toLocaleLowerCase(locale);
           const matchesTerm =
-            !term || searchableText.includes(term);
+            !term ||
+            [
+              localizedProductName(product, locale),
+              localizedCategoryName(category, locale),
+            ].some((value) => normalizeSearchText(value).includes(term));
           const matchesOrigin =
             !origin ||
             product.origins.some((item) => item.country === origin);
@@ -183,11 +177,12 @@ export function ProductCatalog({
       <div className="product-toolbar">
         <div className="catalog-filters">
           <label className="catalog-search">
-            <span className="visually-hidden">{t(locale, "search")}</span>
+            <span className="visually-hidden">{t(locale, "searchProducts")}</span>
             <input
               type="search"
               value={query}
-              placeholder={t(locale, "searchPlaceholder")}
+              placeholder={t(locale, "searchProducts")}
+              autoComplete="off"
               onChange={(event) => setQuery(event.target.value)}
             />
           </label>
