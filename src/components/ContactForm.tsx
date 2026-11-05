@@ -265,7 +265,7 @@ export function ContactForm({
             {showAttachments && (
               <div className="field">
                 <label htmlFor="attachments">{showSupplierInformation ? t(locale, "supportingDocuments") : t(locale, "attachments")}</label>
-                <input id="attachments" name="attachments" type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.webp,.docx,application/pdf,image/jpeg,image/png,image/webp,application/vnd.openxmlformats-officedocument.wordprocessingml.document" aria-invalid={Boolean(fieldErrors.attachments)} aria-describedby="attachments-hint attachments-error" />
+                <input id="attachments" name="attachments" type="file" multiple accept=".pdf,.docx,.png,.jpeg,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/png,image/jpeg" aria-invalid={Boolean(fieldErrors.attachments)} aria-describedby="attachments-hint attachments-error" />
                 <span className="field-hint" id="attachments-hint">{t(locale, "attachmentHelp")}</span>
                 {fieldError("attachments")}
               </div>

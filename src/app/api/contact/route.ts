@@ -8,12 +8,14 @@ export const runtime = "nodejs";
 const formspreeEndpoint = "https://formspree.io/f/mgaapzjr";
 const maxFileSize = 5 * 1024 * 1024;
 const maxRequestSize = 12 * 1024 * 1024;
+const departmentDestinations = {
+  hr: process.env.CONTACT_HR_EMAIL,
+  procurement: process.env.CONTACT_PROCUREMENT_EMAIL,
+} as const;
 const allowedTypes = new Map([
   [".pdf", "application/pdf"],
-  [".jpg", "image/jpeg"],
   [".jpeg", "image/jpeg"],
   [".png", "image/png"],
-  [".webp", "image/webp"],
   [
     ".docx",
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -38,6 +40,7 @@ const formSchema = z.object({
   telephone: z.string().trim().max(50),
   website: z.union([z.literal(""), z.string().trim().url().max(240)]),
   enquiryType: z.enum(enquiryValues),
+  department: z.enum(["hr", "procurement"]).optional(),
   productCategories: z.array(z.string().trim().max(100)).max(12),
   productRange: z.string().trim().max(1200),
   estimatedVolume: z.string().trim().max(200),
@@ -92,17 +95,11 @@ async function readBoundedFormData(request: Request) {
 async function hasExpectedSignature(file: File, extension: string) {
   const signature = Buffer.from(await file.slice(0, 12).arrayBuffer());
   if (extension === ".pdf") return signature.subarray(0, 5).toString() === "%PDF-";
-  if (extension === ".jpg" || extension === ".jpeg") {
+  if (extension === ".jpeg") {
     return signature[0] === 0xff && signature[1] === 0xd8 && signature[2] === 0xff;
   }
   if (extension === ".png") {
     return signature.subarray(0, 8).equals(Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]));
-  }
-  if (extension === ".webp") {
-    return (
-      signature.subarray(0, 4).toString() === "RIFF" &&
-      signature.subarray(8, 12).toString() === "WEBP"
-    );
   }
   if (extension === ".docx") {
     return signature[0] === 0x50 && signature[1] === 0x4b;
@@ -174,6 +171,7 @@ export async function POST(request: Request) {
     telephone: formData.get("telephone") ?? "",
     website: formData.get("website") ?? "",
     enquiryType: formData.get("enquiryType"),
+    department: formData.get("department") ?? undefined,
     productCategories: formData.getAll("productCategories"),
     productRange: formData.get("productRange") ?? "",
     estimatedVolume: formData.get("estimatedVolume") ?? "",
@@ -255,6 +253,11 @@ export async function POST(request: Request) {
   outboundData.set("telephone", data.telephone);
   outboundData.set("website", data.website);
   outboundData.set("enquiryType", data.enquiryType);
+  if (data.department) {
+    outboundData.set("department", data.department);
+    const destination = departmentDestinations[data.department];
+    if (destination) outboundData.set("_to", destination);
+  }
   outboundData.set("productCategories", data.productCategories.join(", "));
   outboundData.set("productRange", data.productRange);
   outboundData.set("estimatedVolume", data.estimatedVolume);

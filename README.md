@@ -24,6 +24,12 @@ Formspree processes form data and linked to its privacy policy.
 The endpoint is currently `https://formspree.io/f/mgaapzjr`, configured in
 `src/app/api/contact/route.ts`.
 
+Optional `CONTACT_HR_EMAIL` and `CONTACT_PROCUREMENT_EMAIL` environment variables
+enable routing for submissions that include `department=hr` or
+`department=procurement`. If the department is omitted or its destination is
+not configured, the submission continues to use Formspree's default recipient.
+The Formspree endpoint remains the delivery endpoint in either case.
+
 Users can also contact PPO directly at `info@ppo.ch` or `+41 62 207 54 54`.
 
 ## Source fidelity
